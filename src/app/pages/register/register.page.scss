@@ -1,0 +1,566 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.register-page {
+  --background: #f5f8f7;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.page-layout {
+  display: grid;
+  grid-template-columns: 46.3% 53.7%;
+  min-height: 100%;
+}
+
+/* LEFT BRAND PANEL */
+
+.brand-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 32px 8%;
+  overflow: hidden;
+  color: #ffffff;
+  background-color: #0b2d24;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.brand-logo {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: #0b2d24;
+  background: #c7f653;
+  border-radius: 9px;
+  transform: rotate(-5deg);
+}
+
+.brand-icon ion-icon {
+  font-size: 19px;
+}
+
+.brand-highlight {
+  color: #c7f653;
+}
+
+.brand-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 510px;
+  margin: auto 0;
+  padding: 40px 0;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+  color: #c7f653;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.eyebrow ion-icon {
+  font-size: 13px;
+}
+
+.brand-content h1 {
+  margin: 0 0 16px;
+  color: #ffffff;
+  font-size: clamp(30px, 3.1vw, 49px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -2px;
+}
+
+.brand-content h1 span {
+  color: #c7f653;
+}
+
+.brand-description {
+  max-width: 410px;
+  margin: 0;
+  color: #c2d2cc;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  margin-top: 29px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #e2eee8;
+  font-size: 11px;
+}
+
+.feature-item ion-icon {
+  color: #c7f653;
+  font-size: 17px;
+}
+
+.brand-bottom {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  color: #8ba79a;
+  font-size: 9px;
+}
+
+/* DECORATIVE CIRCLES */
+
+.decorative-circle {
+  position: absolute;
+  left: -165px;
+  bottom: -230px;
+  width: 355px;
+  height: 355px;
+  border: 1px solid rgba(199, 246, 83, 0.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.circle-two {
+  left: -105px;
+  bottom: -170px;
+  width: 235px;
+  height: 235px;
+  background: rgba(199, 246, 83, 0.025);
+}
+
+/* RIGHT PANEL */
+
+.form-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 100vh;
+  padding: 48px 28px;
+  background: #f5f8f7;
+}
+
+.back-home {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px;
+  color: #18382f;
+  background: transparent;
+  border: none;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+/* REGISTER CARD */
+
+.register-card {
+  width: 100%;
+  max-width: 368px;
+  padding: 29px 28px 25px;
+  background: #ffffff;
+  border: 1px solid #dce7e1;
+  border-radius: 19px;
+  box-shadow: 0 20px 55px rgba(18, 53, 40, 0.09);
+}
+
+.welcome-label {
+  display: block;
+  margin-bottom: 13px;
+  color: #608b16;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.card-heading h2 {
+  margin: 0 0 7px;
+  color: #102d25;
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.8px;
+}
+
+.card-heading p {
+  margin: 0 0 19px;
+  color: #74827d;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* ACCOUNT TYPE */
+
+.account-type {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 17px;
+}
+
+.account-option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  min-height: 51px;
+  padding: 8px 10px;
+  color: #17372c;
+  background: #f6f9f7;
+  border: 1px solid #d8e4dd;
+  border-radius: 9px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.account-option > ion-icon {
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.account-option.selected {
+  background: #eff9ce;
+  border-color: #86b72f;
+  box-shadow: 0 0 0 1px rgba(134, 183, 47, 0.08);
+}
+
+.account-option-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.account-option strong {
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.account-option small {
+  color: #829087;
+  font-size: 8px;
+}
+
+/* FORM FIELDS */
+
+.form-field {
+  margin-bottom: 13px;
+}
+
+.form-field > label {
+  display: block;
+  margin-bottom: 7px;
+  color: #19372e;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 38px;
+  padding: 0 10px;
+  background: #f6f9f7;
+  border: 1px solid #d8e4dd;
+  border-radius: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-wrapper:focus-within {
+  border-color: #8fbf32;
+  box-shadow: 0 0 0 3px rgba(199, 246, 83, 0.16);
+}
+
+.input-wrapper ion-icon {
+  flex-shrink: 0;
+  color: #84978e;
+  font-size: 14px;
+}
+
+.input-wrapper input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  color: #19372e;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 10px;
+}
+
+.input-wrapper input::placeholder {
+  color: #8a9992;
+}
+
+/* SHOP OWNER NOTICE */
+
+.approval-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 13px;
+  padding: 10px;
+  color: #36552d;
+  background: #f3f9e8;
+  border: 1px solid #dfebc8;
+  border-radius: 8px;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.approval-notice ion-icon {
+  flex-shrink: 0;
+  font-size: 15px;
+}
+
+/* TERMS */
+
+.terms-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 5px 0 17px;
+  color: #50645a;
+  font-size: 9px;
+  line-height: 1.7;
+  cursor: pointer;
+}
+
+.terms-option input {
+  flex-shrink: 0;
+  width: 11px;
+  height: 11px;
+  margin: 2px 0 0;
+  accent-color: #9bce37;
+}
+
+.terms-link {
+  display: inline;
+  padding: 0;
+  color: #608b16;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* CREATE ACCOUNT BUTTON */
+
+.register-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 39px;
+  padding: 10px;
+  color: #18321d;
+  background: #c7f653;
+  border: none;
+  border-radius: 9px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.register-button:hover {
+  background: #b8eb42;
+}
+
+.register-button:active {
+  transform: scale(0.99);
+}
+
+.register-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.register-button ion-icon {
+  font-size: 15px;
+}
+
+/* LOGIN FOOTER */
+
+.login-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 17px;
+  padding-top: 15px;
+  border-top: 1px solid #dce7e1;
+  font-size: 9px;
+}
+
+.login-footer span {
+  color: #7d8983;
+}
+
+.login-footer button {
+  padding: 0;
+  color: #608b16;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.login-footer button:hover {
+  text-decoration: underline;
+}
+
+/* TABLET */
+
+@media (max-width: 900px) {
+  .page-layout {
+    grid-template-columns: 40% 60%;
+  }
+
+  .brand-panel {
+    padding-right: 7%;
+    padding-left: 7%;
+  }
+
+  .brand-content h1 {
+    font-size: clamp(28px, 4vw, 39px);
+    letter-spacing: -1.5px;
+  }
+
+  .form-panel {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .register-card {
+    padding-right: 21px;
+    padding-left: 21px;
+  }
+
+  .account-option {
+    gap: 6px;
+    padding: 7px;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 650px) {
+  .page-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-panel {
+    min-height: auto;
+    padding: 22px 24px 25px;
+  }
+
+  .brand-content {
+    padding: 35px 0 18px;
+  }
+
+  .brand-content h1 {
+    font-size: 34px;
+  }
+
+  .brand-description {
+    font-size: 12px;
+  }
+
+  .feature-list {
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  .brand-bottom {
+    margin-top: 12px;
+  }
+
+  .decorative-circle {
+    left: auto;
+    right: -120px;
+    bottom: -200px;
+  }
+
+  .form-panel {
+    flex: 1;
+    min-height: auto;
+    padding: 55px 20px 35px;
+  }
+
+  .back-home {
+    top: 14px;
+    right: 18px;
+  }
+
+  .register-card {
+    max-width: 420px;
+    padding: 28px 23px;
+  }
+}
+
+@media (max-width: 380px) {
+  .brand-content h1 {
+    font-size: 29px;
+  }
+
+  .register-card {
+    padding: 24px 17px;
+  }
+
+  .card-heading h2 {
+    font-size: 21px;
+  }
+
+  .account-option {
+    padding: 7px 6px;
+  }
+
+  .account-option strong {
+    font-size: 8px;
+  }
+}

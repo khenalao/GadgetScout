@@ -1,0 +1,1431 @@
+﻿
+<ion-content [fullscreen]="true" class="shop-content">
+
+  <div class="dashboard-layout" [class.sidebar-collapsed]="isSidebarCollapsed">
+
+    <!-- MOBILE SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay" *ngIf="mobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="shop-sidebar" [class.mobile-open]="mobileMenuOpen">
+
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <ion-icon name="construct-outline"></ion-icon>
+        </div>
+
+        <div class="brand-text">
+          <h2>GadgetScout</h2>
+          <span>SHOP OWNER</span>
+        </div>
+
+        <button class="mobile-close" (click)="closeMobileMenu()" aria-label="Close sidebar">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </div>
+
+      <p class="sidebar-label">MENU</p>
+
+      <nav class="sidebar-nav">
+
+        <button class="nav-item" [class.active]="activeSection === 'dashboard'" (click)="selectSection('dashboard')" title="Dashboard">
+          <ion-icon name="home-outline"></ion-icon>
+          <span>Dashboard</span>
+        </button>
+
+        <button class="nav-item" [class.active]="activeSection === 'shop-information'" (click)="selectSection('shop-information')" title="Shop Information">
+          <ion-icon name="business-outline"></ion-icon>
+          <span>Shop Information</span>
+        </button>
+
+        <button class="nav-item" [class.active]="activeSection === 'services'" (click)="selectSection('services')" title="Services">
+          <ion-icon name="construct-outline"></ion-icon>
+          <span>Services</span>
+        </button>
+
+        <button class="nav-item" [class.active]="activeSection === 'repair-requests'" (click)="selectSection('repair-requests')" title="Repair Requests">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <span>Repair Requests</span>
+          <span class="request-count-badge" *ngIf="pendingRepairRequestsCount > 0">
+            {{ pendingRepairRequestsCount }}
+          </span>
+        </button>
+
+        <button class="nav-item" [class.active]="activeSection === 'shop-location'" (click)="selectSection('shop-location')" title="Shop Location">
+          <ion-icon name="location-outline"></ion-icon>
+          <span>Shop Location</span>
+        </button>
+
+        <button class="nav-item" [class.active]="activeSection === 'subscription-payment'" (click)="selectSection('subscription-payment')" title="Subscription and Payment">
+          <ion-icon name="card-outline"></ion-icon>
+          <span>Subscription & Payment</span>
+        </button>
+
+      </nav>
+
+      <div class="sidebar-bottom">
+
+        <div class="sidebar-user">
+          <div class="user-avatar">
+            <ion-icon name="person-circle-outline"></ion-icon>
+          </div>
+
+          <div class="user-details">
+            <strong>{{ ownerName }}</strong>
+            <span>Shop Owner</span>
+          </div>
+        </div>
+
+        <button class="logout-button" (click)="logout()" [disabled]="isLoggingOut" title="Logout">
+          <ion-icon name="log-out-outline"></ion-icon>
+          <span>{{ isLoggingOut ? 'Logging out...' : 'Logout' }}</span>
+        </button>
+
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+      <header class="dashboard-topbar">
+
+        <div class="topbar-left">
+
+          <button class="menu-toggle desktop-sidebar-button" (click)="toggleSidebar()"
+            [attr.aria-label]="isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+            [title]="isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+            <ion-icon name="menu-outline"></ion-icon>
+          </button>
+
+          <button class="menu-toggle mobile-menu-button" (click)="toggleMobileMenu()"
+            aria-label="Open sidebar" title="Open sidebar">
+            <ion-icon name="menu-outline"></ion-icon>
+          </button>
+
+          <div>
+            <span class="topbar-label">GADGETSCOUT / SHOP OWNER</span>
+            <h1>Shop Owner Dashboard</h1>
+          </div>
+
+        </div>
+
+        <div class="topbar-user">
+          <ion-icon name="person-circle-outline"></ion-icon>
+          <span>{{ ownerName }}</span>
+        </div>
+
+      </header>
+
+      <div class="dashboard-container">
+
+        <!-- LOADING -->
+        <div class="loading-screen" *ngIf="isLoading">
+          <ion-spinner name="crescent"></ion-spinner>
+          <p>Loading your shop dashboard...</p>
+        </div>
+
+        <!-- ERROR SCREEN -->
+        <div class="error-screen" *ngIf="!isLoading && !shop">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <h2>Dashboard Unavailable</h2>
+          <p>{{ errorMessage || 'Your shop information could not be loaded.' }}</p>
+
+          <ion-button (click)="refreshDashboard()">
+            <ion-icon name="refresh-outline" slot="start"></ion-icon>
+            Try Again
+          </ion-button>
+        </div>
+
+        <!-- SHOP DASHBOARD -->
+        <ng-container *ngIf="!isLoading && shop">
+
+          <div class="services-message error" *ngIf="errorMessage">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+
+          <!-- SECTION 1: DASHBOARD -->
+          <ng-container *ngIf="activeSection === 'dashboard'">
+
+            <section class="welcome-section" id="dashboard">
+              <div>
+                <span class="welcome-label">SHOP OWNER DASHBOARD</span>
+                <h2>Welcome, {{ ownerName }}!</h2>
+                <p>Manage your repair shop and monitor your GadgetScout account.</p>
+              </div>
+
+              <div class="welcome-icon">
+                <ion-icon name="storefront-outline"></ion-icon>
+              </div>
+            </section>
+
+            <section class="stats-grid">
+
+              <div class="stat-card">
+                <div class="stat-icon green">
+                  <ion-icon name="checkmark-circle-outline"></ion-icon>
+                </div>
+                <div>
+                  <span>SHOP PROFILE STATUS</span>
+                  <h3 class="approved-status">{{ shop.profileStatus | titlecase }}</h3>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon lime">
+                  <ion-icon name="document-text-outline"></ion-icon>
+                </div>
+                <div>
+                  <span>PUBLICATION STATUS</span>
+                  <h3>{{ shop.publicationStatus | titlecase }}</h3>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon blue">
+                  <ion-icon name="time-outline"></ion-icon>
+                </div>
+                <div>
+                  <span>SUBSCRIPTION STATUS</span>
+                  <h3>{{ paymentStatusLabel }}</h3>
+                </div>
+              </div>
+
+            </section>
+
+            <section class="content-card">
+              <div class="section-heading">
+                <div>
+                  <span class="section-label">ACCOUNT DETAILS</span>
+                  <h2>Account Information</h2>
+                </div>
+              </div>
+
+              <div class="information-grid">
+                <div class="information-item">
+                  <span>Account Name</span>
+                  <strong>{{ ownerName }}</strong>
+                </div>
+
+                <div class="information-item">
+                  <span>Email Address</span>
+                  <strong>{{ ownerEmail }}</strong>
+                </div>
+
+                <div class="information-item">
+                  <span>Account Role</span>
+                  <strong>Shop Owner</strong>
+                </div>
+
+                <div class="information-item">
+                  <span>Account Status</span>
+                  <strong class="approved-status">Approved</strong>
+                </div>
+              </div>
+            </section>
+
+          </ng-container>
+
+          <!-- SECTION 2: SHOP INFORMATION -->
+          <ng-container *ngIf="activeSection === 'shop-information'">
+
+            <section class="content-card" id="shop-information">
+
+              <div class="section-heading">
+                <div>
+                  <span class="section-label">SHOP DETAILS</span>
+                  <h2>Shop Information</h2>
+                </div>
+
+                <span class="status-pill">
+                  <ion-icon name="checkmark-circle-outline"></ion-icon>
+                  Verified Profile
+                </span>
+              </div>
+
+              <div class="information-grid">
+
+                <div class="information-item">
+                  <span>Shop Name</span>
+                  <strong>{{ shop.shopName || 'Not provided' }}</strong>
+                </div>
+
+                <div class="information-item">
+                  <span>Shop Category</span>
+                  <strong>{{ shop.category || 'Not provided' }}</strong>
+                </div>
+
+                <div class="information-item">
+                  <span>Shop Owner</span>
+                  <strong>{{ shop.ownerName || ownerName }}</strong>
+                </div>
+
+                <div class="information-item">
+                  <span>Email Address</span>
+                  <strong>{{ shop.email || ownerEmail }}</strong>
+                </div>
+
+                <div class="information-item">
+                  <span>Contact Number</span>
+                  <strong>{{ shop['contactNumber'] || 'Not provided' }}</strong>
+                </div>
+
+                <div class="information-item">
+                  <span>Shop Address</span>
+                  <strong>{{ shop.address || 'Not provided' }}</strong>
+                </div>
+
+                <div class="information-item full-width">
+                  <span>About Our Shop</span>
+                  <p>{{ shop.description || 'No shop description provided.' }}</p>
+                </div>
+
+              </div>
+            </section>
+
+          </ng-container>
+
+          <!-- SECTION 3: SERVICES -->
+          <ng-container *ngIf="activeSection === 'services'">
+
+            <section class="content-card services-content-card" id="services">
+
+              <!-- SERVICES HEADER -->
+              <div class="services-page-header">
+
+                <div class="services-title-group">
+                  <div class="services-title-icon">
+                    <ion-icon name="construct-outline"></ion-icon>
+                  </div>
+
+                  <div>
+                    <span class="section-label">REPAIR SERVICES</span>
+                    <h2>Our Services</h2>
+                    <p>Manage the repair services your shop offers to customers.</p>
+                  </div>
+                </div>
+
+                <ion-button *ngIf="!isEditingServices"
+                  class="edit-services-button"
+                  (click)="openServicesEditor()">
+                  <ion-icon name="create-outline" slot="start"></ion-icon>
+                  Edit Services
+                </ion-button>
+
+              </div>
+
+              <!-- SUCCESS MESSAGE -->
+              <div class="services-message success" *ngIf="servicesSuccess">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                <span>{{ servicesSuccess }}</span>
+              </div>
+
+              <!-- SERVICE OVERVIEW -->
+              <div class="services-overview" *ngIf="!isEditingServices">
+
+                <div class="services-overview-text">
+                  <div>
+                    <span class="services-overview-label">YOUR SERVICE LIST</span>
+                    <h3>What can your shop repair?</h3>
+                    <p>
+                      These are the services customers can view when they
+                      discover your repair shop.
+                    </p>
+                  </div>
+
+                  <div class="services-count">
+                    <strong>{{ shop.services?.length || 0 }}</strong>
+                    <span>Services</span>
+                  </div>
+                </div>
+
+                <div class="services-list redesigned-services-list"
+                  *ngIf="shop.services?.length; else noServices">
+
+                  <div class="service-item redesigned-service-item"
+                    *ngFor="let service of shop.services; let i = index">
+
+                    <div class="service-item-icon">
+                      <ion-icon name="construct-outline"></ion-icon>
+                    </div>
+
+                    <div class="service-item-content">
+                      <span class="service-item-number">
+                        SERVICE {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}
+                      </span>
+                      <strong>{{ service }}</strong>
+                    </div>
+
+                    <ion-icon class="service-item-check"
+                      name="checkmark-circle-outline">
+                    </ion-icon>
+
+                  </div>
+                </div>
+
+                <ng-template #noServices>
+                  <div class="empty-services redesigned-empty-services">
+                    <div class="empty-services-icon">
+                      <ion-icon name="construct-outline"></ion-icon>
+                    </div>
+                    <h3>No Services Added Yet</h3>
+                    <p>
+                      Add the repair services offered by your shop so customers
+                      can easily understand what you can help them with.
+                    </p>
+                    <ion-button fill="outline" size="small"
+                      (click)="openServicesEditor()">
+                      <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+                      Add Your First Service
+                    </ion-button>
+                  </div>
+                </ng-template>
+
+              </div>
+
+              <!-- SERVICES EDITOR -->
+              <div class="services-editor redesigned-services-editor"
+                *ngIf="isEditingServices">
+
+                <div class="services-editor-intro">
+                  <div class="services-editor-icon">
+                    <ion-icon name="create-outline"></ion-icon>
+                  </div>
+
+                  <div>
+                    <h3>Build Your Service List</h3>
+                    <p>
+                      Choose from suggested repair services or add your own
+                      custom service. You can review your selections before saving.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- STEP 1: SUGGESTED SERVICES -->
+                <div class="suggested-services-panel">
+
+                  <div class="suggested-services-heading">
+                    <div>
+                      <span class="services-overview-label">STEP 1</span>
+                      <h4>Choose Suggested Services</h4>
+                      <p>Select a service below to add it to your shop.</p>
+                    </div>
+
+                    <div class="suggested-heading-icon">
+                      <ion-icon name="layers-outline"></ion-icon>
+                    </div>
+                  </div>
+
+                  <!-- SMARTPHONE -->
+                  <div class="suggestion-category">
+                    <div class="suggestion-category-heading">
+                      <div class="suggestion-category-icon smartphone">
+                        <ion-icon name="phone-portrait-outline"></ion-icon>
+                      </div>
+                      <div>
+                        <h5>Smartphone Repair</h5>
+                        <span>Common mobile phone repair services</span>
+                      </div>
+                    </div>
+
+                    <div class="suggestion-chips">
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Screen Replacement'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Screen Replacement
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Battery Replacement'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Battery Replacement
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Charging Port Repair'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Charging Port Repair
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Water Damage Repair'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Water Damage Repair
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Camera Repair'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Camera Repair
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Software Troubleshooting'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Software Troubleshooting
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- LAPTOP -->
+                  <div class="suggestion-category">
+                    <div class="suggestion-category-heading">
+                      <div class="suggestion-category-icon laptop">
+                        <ion-icon name="laptop-outline"></ion-icon>
+                      </div>
+                      <div>
+                        <h5>Laptop Repair</h5>
+                        <span>Hardware and software laptop services</span>
+                      </div>
+                    </div>
+
+                    <div class="suggestion-chips">
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Laptop Screen Replacement'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Screen Replacement
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Keyboard Replacement'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Keyboard Replacement
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Laptop Battery Replacement'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Battery Replacement
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Laptop Overheating Repair'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Overheating Repair
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Laptop OS Installation'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        OS Installation
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Laptop Hardware Upgrade'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Hardware Upgrade
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- TABLET -->
+                  <div class="suggestion-category">
+                    <div class="suggestion-category-heading">
+                      <div class="suggestion-category-icon tablet">
+                        <ion-icon name="tablet-portrait-outline"></ion-icon>
+                      </div>
+                      <div>
+                        <h5>Tablet Repair</h5>
+                        <span>Tablet maintenance and repair services</span>
+                      </div>
+                    </div>
+
+                    <div class="suggestion-chips">
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Tablet Screen Replacement'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Screen Replacement
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Tablet Battery Replacement'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Battery Replacement
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Tablet Charging Port Repair'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Charging Port Repair
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Tablet Software Repair'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Software Repair
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- COMPUTER -->
+                  <div class="suggestion-category">
+                    <div class="suggestion-category-heading">
+                      <div class="suggestion-category-icon computer">
+                        <ion-icon name="desktop-outline"></ion-icon>
+                      </div>
+                      <div>
+                        <h5>Computer Repair</h5>
+                        <span>Desktop computer repair and maintenance</span>
+                      </div>
+                    </div>
+
+                    <div class="suggestion-chips">
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'PC Troubleshooting'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        PC Troubleshooting
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Windows Installation'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Windows Installation
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Hardware Replacement'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Hardware Replacement
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Virus and Malware Removal'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Virus and Malware Removal
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'Data Recovery'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        Data Recovery
+                      </button>
+
+                      <button type="button" class="suggestion-chip"
+                        (click)="newServiceName = 'PC Cleaning and Maintenance'; addService()"
+                        [disabled]="isSavingServices">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        PC Cleaning and Maintenance
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- STEP 2: CUSTOM SERVICE -->
+                <div class="services-input-panel">
+
+                  <div class="custom-service-heading">
+                    <div>
+                      <span class="services-overview-label">STEP 2</span>
+                      <h4>Add a Custom Service</h4>
+                      <p>Can't find your service in the suggestions? Add your own.</p>
+                    </div>
+
+                    <div class="custom-service-icon">
+                      <ion-icon name="add-circle-outline"></ion-icon>
+                    </div>
+                  </div>
+
+                  <label for="newServiceName">Custom service name</label>
+
+                  <div class="add-service-row">
+
+                    <div class="service-input-wrapper">
+                      <ion-icon name="construct-outline"></ion-icon>
+
+                      <input
+                        id="newServiceName"
+                        type="text"
+                        placeholder="Example: Smartphone Screen Replacement"
+                        [value]="newServiceName"
+                        (input)="onNewServiceInput($event)"
+                        (keyup.enter)="addService()"
+                        maxlength="60">
+                    </div>
+
+                    <ion-button type="button"
+                      (click)="addService()"
+                      [disabled]="isSavingServices">
+                      <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+                      Add Custom Service
+                    </ion-button>
+
+                  </div>
+
+                  <div class="service-input-hint">
+                    <ion-icon name="information-circle-outline"></ion-icon>
+                    <span>Maximum of 60 characters per service. Avoid duplicate service names.</span>
+                  </div>
+
+                </div>
+
+                <!-- ERROR MESSAGE -->
+                <div class="services-message error" *ngIf="servicesError">
+                  <ion-icon name="alert-circle-outline"></ion-icon>
+                  <span>{{ servicesError }}</span>
+                </div>
+
+                <!-- STEP 3: REVIEW SERVICES -->
+                <div class="editable-services-heading">
+
+                  <div>
+                    <span class="services-overview-label">STEP 3</span>
+                    <h4>Review Your Selected Services</h4>
+                    <p>Remove any service you don't offer before saving.</p>
+                  </div>
+
+                  <span class="editable-services-count">
+                    {{ editableServices.length }} / 30 Services
+                  </span>
+
+                </div>
+
+                <div class="editable-services-grid">
+
+                  <div class="service-item editable-service-item redesigned-editable-service"
+                    *ngFor="let service of editableServices; let i = index">
+
+                    <div class="editable-service-information">
+
+                      <div class="editable-service-icon">
+                        <ion-icon name="construct-outline"></ion-icon>
+                      </div>
+
+                      <div>
+                        <span>
+                          SERVICE {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}
+                        </span>
+                        <strong>{{ service }}</strong>
+                      </div>
+
+                    </div>
+
+                    <ion-button class="remove-service-button"
+                      fill="clear"
+                      color="danger"
+                      size="small"
+                      (click)="removeService(i)"
+                      [disabled]="isSavingServices"
+                      aria-label="Remove service">
+                      <ion-icon name="trash-outline"></ion-icon>
+                    </ion-button>
+
+                  </div>
+
+                </div>
+
+                <!-- EMPTY STATE -->
+                <div class="empty-services editor-empty-services"
+                  *ngIf="editableServices.length === 0">
+
+                  <div class="empty-services-icon">
+                    <ion-icon name="clipboard-outline"></ion-icon>
+                  </div>
+
+                  <h3>No Services Selected</h3>
+                  <p>
+                    Start by selecting a suggested service above or add your
+                    own custom repair service.
+                  </p>
+
+                </div>
+
+                <!-- EDITOR FOOTER -->
+                <div class="services-editor-footer">
+
+                  <div class="services-editor-note">
+                    <ion-icon name="information-circle-outline"></ion-icon>
+                    <span>
+                      Your changes will appear in your shop profile after saving.
+                    </span>
+                  </div>
+
+                  <div class="services-editor-actions">
+
+                    <ion-button fill="outline" color="medium"
+                      (click)="cancelServicesEdit()"
+                      [disabled]="isSavingServices">
+                      Cancel
+                    </ion-button>
+
+                    <ion-button class="save-services-button"
+                      (click)="saveServices()"
+                      [disabled]="isSavingServices">
+
+                      <ion-spinner *ngIf="isSavingServices" name="crescent"></ion-spinner>
+
+                      <ion-icon *ngIf="!isSavingServices"
+                        name="save-outline" slot="start">
+                      </ion-icon>
+
+                      {{ isSavingServices ? 'Saving...' : 'Save Services' }}
+
+                    </ion-button>
+
+                  </div>
+                </div>
+
+              </div>
+
+            </section>
+
+          </ng-container>
+
+          <!-- SECTION 4: REPAIR REQUESTS -->
+          <ng-container *ngIf="activeSection === 'repair-requests'">
+
+            <section class="content-card repair-requests-section" id="repair-requests">
+
+              <div class="section-heading">
+                <div>
+                  <span class="section-label">CUSTOMER SERVICE</span>
+                  <h2>Repair Requests</h2>
+                  <p class="section-description">
+                    Review customer repair requests and update their service status.
+                  </p>
+                </div>
+
+                <ion-button fill="outline" size="small"
+                  (click)="refreshRepairRequests()"
+                  [disabled]="isLoadingRepairRequests">
+                  <ion-icon name="refresh-outline" slot="start"></ion-icon>
+                  Refresh
+                </ion-button>
+              </div>
+
+              <div class="request-summary-grid">
+
+                <div class="request-summary-card">
+                  <div class="request-summary-icon pending">
+                    <ion-icon name="time-outline"></ion-icon>
+                  </div>
+                  <div>
+                    <span>Pending Requests</span>
+                    <strong>{{ pendingRepairRequestsCount }}</strong>
+                  </div>
+                </div>
+
+                <div class="request-summary-card">
+                  <div class="request-summary-icon total">
+                    <ion-icon name="document-text-outline"></ion-icon>
+                  </div>
+                  <div>
+                    <span>Total Requests</span>
+                    <strong>{{ repairRequests.length }}</strong>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="services-message success" *ngIf="repairRequestsSuccess">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                <span>{{ repairRequestsSuccess }}</span>
+              </div>
+
+              <div class="services-message error" *ngIf="repairRequestsError">
+                <ion-icon name="alert-circle-outline"></ion-icon>
+                <span>{{ repairRequestsError }}</span>
+              </div>
+
+              <div class="requests-loading" *ngIf="isLoadingRepairRequests">
+                <ion-spinner name="crescent"></ion-spinner>
+                <p>Loading repair requests...</p>
+              </div>
+
+              <div class="requests-empty-state"
+                *ngIf="!isLoadingRepairRequests && !repairRequestsError && repairRequests.length === 0">
+
+                <div class="requests-empty-icon">
+                  <ion-icon name="document-text-outline"></ion-icon>
+                </div>
+
+                <h3>No Repair Requests Yet</h3>
+                <p>Customer repair requests submitted to your shop will appear here.</p>
+
+              </div>
+
+              <div class="repair-request-list"
+                *ngIf="!isLoadingRepairRequests && repairRequests.length > 0">
+
+                <article class="repair-request-card" *ngFor="let request of repairRequests">
+
+                  <div class="repair-request-header">
+
+                    <div class="repair-request-heading">
+                      <span class="request-reference">REPAIR REQUEST</span>
+                      <h3>{{ request.serviceName || 'Repair Service' }}</h3>
+
+                      <p>
+                        Submitted:
+                        <ng-container *ngIf="getRequestDate(request.createdAt) as requestDate">
+                          {{ requestDate | date:'medium' }}
+                        </ng-container>
+                        <ng-container *ngIf="!request.createdAt">
+                          Date unavailable
+                        </ng-container>
+                      </p>
+                    </div>
+
+                    <span class="request-status" [ngClass]="'status-' + request.status">
+                      {{ getRequestStatusLabel(request.status) }}
+                    </span>
+
+                  </div>
+
+                  <div class="request-details-group">
+                    <h4>
+                      <ion-icon name="person-circle-outline"></ion-icon>
+                      Customer Information
+                    </h4>
+
+                    <div class="request-details-grid">
+                      <div class="request-detail-item">
+                        <span>Customer Name</span>
+                        <strong>{{ request.customerName || 'Not provided' }}</strong>
+                      </div>
+
+                      <div class="request-detail-item">
+                        <span>Email Address</span>
+                        <strong>{{ request.customerEmail || 'Not provided' }}</strong>
+                      </div>
+
+                      <div class="request-detail-item">
+                        <span>Contact Number</span>
+                        <strong>{{ request.customerContact || 'Not provided' }}</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="request-details-group">
+                    <h4>
+                      <ion-icon name="construct-outline"></ion-icon>
+                      Gadget Information
+                    </h4>
+
+                    <div class="request-details-grid">
+                      <div class="request-detail-item">
+                        <span>Gadget Type</span>
+                        <strong>{{ request.gadgetType || 'Not provided' }}</strong>
+                      </div>
+
+                      <div class="request-detail-item">
+                        <span>Brand</span>
+                        <strong>{{ request.gadgetBrand || 'Not provided' }}</strong>
+                      </div>
+
+                      <div class="request-detail-item">
+                        <span>Model</span>
+                        <strong>{{ request.gadgetModel || 'Not provided' }}</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- APPOINTMENT SCHEDULE -->
+                  <div class="request-details-group appointment-request-group"
+                    *ngIf="request.appointmentDate || request.appointmentTime">
+
+                    <h4>
+                      <ion-icon name="calendar-outline"></ion-icon>
+                      Appointment Schedule
+                    </h4>
+
+                    <div class="request-details-grid">
+
+                      <div class="request-detail-item">
+                        <span>Requested Date</span>
+                        <strong>
+                          {{ request.appointmentDate || 'Not provided' }}
+                        </strong>
+                      </div>
+
+                      <div class="request-detail-item">
+                        <span>Requested Time</span>
+                        <strong>
+                          {{ request.appointmentTime || 'Not provided' }}
+                        </strong>
+                      </div>
+
+                      <div class="request-detail-item">
+                        <span>Appointment Status</span>
+
+                        <strong
+                          class="appointment-status-label"
+                          [ngClass]="'appointment-' + request.status">
+
+                          <ng-container [ngSwitch]="request.status">
+
+                            <span *ngSwitchCase="'pending'">
+                              Pending Confirmation
+                            </span>
+
+                            <span *ngSwitchCase="'accepted'">
+                              Confirmed
+                            </span>
+
+                            <span *ngSwitchCase="'in-progress'">
+                              Confirmed
+                            </span>
+
+                            <span *ngSwitchCase="'completed'">
+                              Confirmed
+                            </span>
+
+                            <span *ngSwitchCase="'rejected'">
+                              Not Accepted
+                            </span>
+
+                            <span *ngSwitchDefault>
+                              Pending Confirmation
+                            </span>
+
+                          </ng-container>
+
+                        </strong>
+                      </div>
+
+                    </div>
+
+                    <div class="appointment-request-note" [ngSwitch]="request.status">
+
+                      <p *ngSwitchCase="'pending'">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        The customer requested this appointment schedule.
+                        Please review and accept or reject the repair request to confirm or decline it.
+                      </p>
+
+                      <p *ngSwitchCase="'accepted'">
+                        <ion-icon name="checkmark-circle-outline"></ion-icon>
+                        You accepted this repair request. The requested appointment schedule is confirmed.
+                      </p>
+
+                      <p *ngSwitchCase="'in-progress'">
+                        <ion-icon name="checkmark-circle-outline"></ion-icon>
+                        The appointment schedule was confirmed and the repair is currently in progress.
+                      </p>
+
+                      <p *ngSwitchCase="'completed'">
+                        <ion-icon name="checkmark-circle-outline"></ion-icon>
+                        This repair request was completed. The confirmed appointment schedule is shown above.
+                      </p>
+
+                      <p *ngSwitchCase="'rejected'">
+                        <ion-icon name="alert-circle-outline"></ion-icon>
+                        This repair request was rejected. The requested appointment schedule was not accepted.
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                  <div class="request-issue">
+                    <h4>
+                      <ion-icon name="information-circle-outline"></ion-icon>
+                      Issue Description
+                    </h4>
+                    <p>{{ request.issueDescription || 'No issue description provided.' }}</p>
+                  </div>
+
+                  <div class="request-actions">
+
+                    <ng-container *ngIf="request.status === 'pending'">
+
+                      <button class="request-action-button accept"
+                        (click)="acceptRequest(request)"
+                        [disabled]="updatingRequestId === request.id">
+
+                        <ion-spinner *ngIf="updatingRequestId === request.id" name="crescent"></ion-spinner>
+                        <ion-icon *ngIf="updatingRequestId !== request.id" name="checkmark-circle-outline"></ion-icon>
+                        Accept Request
+
+                      </button>
+
+                      <button class="request-action-button reject"
+                        (click)="rejectRequest(request)"
+                        [disabled]="updatingRequestId === request.id">
+                        <ion-icon name="close-outline"></ion-icon>
+                        Reject Request
+                      </button>
+
+                    </ng-container>
+
+                    <button *ngIf="request.status === 'accepted'"
+                      class="request-action-button progress"
+                      (click)="startRequest(request)"
+                      [disabled]="updatingRequestId === request.id">
+
+                      <ion-spinner *ngIf="updatingRequestId === request.id" name="crescent"></ion-spinner>
+                      <ion-icon *ngIf="updatingRequestId !== request.id" name="construct-outline"></ion-icon>
+                      Start Repair
+
+                    </button>
+
+                    <button *ngIf="request.status === 'in-progress'"
+                      class="request-action-button complete"
+                      (click)="completeRequest(request)"
+                      [disabled]="updatingRequestId === request.id">
+
+                      <ion-spinner *ngIf="updatingRequestId === request.id" name="crescent"></ion-spinner>
+                      <ion-icon *ngIf="updatingRequestId !== request.id" name="checkmark-done-circle-outline"></ion-icon>
+                      Mark as Completed
+
+                    </button>
+
+                    <div class="request-final-status rejected" *ngIf="request.status === 'rejected'">
+                      <ion-icon name="close-circle-outline"></ion-icon>
+                      This request has been rejected.
+                    </div>
+
+                    <div class="request-final-status completed" *ngIf="request.status === 'completed'">
+                      <ion-icon name="checkmark-done-circle-outline"></ion-icon>
+                      This repair request has been completed.
+                    </div>
+
+                  </div>
+
+                </article>
+
+              </div>
+
+            </section>
+
+          </ng-container>
+
+          <!-- SECTION 5: SHOP LOCATION -->
+          <ng-container *ngIf="activeSection === 'shop-location'">
+
+            <section class="content-card location-card" id="shop-location">
+
+              <div class="section-heading">
+                <div>
+                  <span class="section-label">LOCATION MANAGEMENT</span>
+                  <h2>Shop Location</h2>
+                  <p class="section-description">
+                    Set the exact location of your repair shop on the map.
+                    Customers can use this location to find your shop.
+                  </p>
+                </div>
+
+                <span class="location-status" [class.saved]="hasSavedLocation">
+                  <ion-icon [name]="hasSavedLocation ? 'checkmark-circle-outline' : 'alert-circle-outline'"></ion-icon>
+                  {{ hasSavedLocation ? 'Location Saved' : 'Not Saved' }}
+                </span>
+              </div>
+
+              <div class="map-instructions">
+                <ion-icon name="information-circle-outline"></ion-icon>
+                <p>
+                  Click anywhere on the map to place your shop marker.
+                  You can also use your current location.
+                  Make sure the marker is positioned at your actual shop location.
+                </p>
+              </div>
+
+              <div class="map-actions">
+                <button class="current-location-button" (click)="useCurrentLocation()">
+                  <ion-icon name="navigate-outline"></ion-icon>
+                  Use My Current Location
+                </button>
+              </div>
+
+              <div id="shopMap" class="shop-location-map"></div>
+
+              <div class="coordinates-grid">
+                <div class="coordinate-item">
+                  <span>LATITUDE</span>
+                  <strong>
+                    {{ hasSelectedLocation ? (selectedLatitude | number:'1.6-6') : 'Not selected' }}
+                  </strong>
+                </div>
+
+                <div class="coordinate-item">
+                  <span>LONGITUDE</span>
+                  <strong>
+                    {{ hasSelectedLocation ? (selectedLongitude | number:'1.6-6') : 'Not selected' }}
+                  </strong>
+                </div>
+              </div>
+
+              <div class="map-footer">
+                <p>
+                  <ion-icon name="alert-circle-outline"></ion-icon>
+                  Make sure the marker is placed at your actual shop location before saving.
+                </p>
+
+                <button class="save-location-button"
+                  (click)="saveLocation()"
+                  [disabled]="!hasSelectedLocation || isSavingLocation">
+
+                  <ion-spinner *ngIf="isSavingLocation" name="crescent"></ion-spinner>
+                  <ion-icon *ngIf="!isSavingLocation" name="save-outline"></ion-icon>
+
+                  {{ isSavingLocation ? 'Saving Location...' : 'Save Shop Location' }}
+
+                </button>
+              </div>
+
+            </section>
+
+          </ng-container>
+
+          <!-- SECTION 6: SUBSCRIPTION & PAYMENT -->
+          <ng-container *ngIf="activeSection === 'subscription-payment'">
+
+            <section class="content-card subscription-card" id="subscription-payment">
+
+              <div class="section-heading">
+                <div>
+                  <span class="section-label">PREMIUM MEMBERSHIP</span>
+                  <h2>Subscription & Payment</h2>
+                  <p class="section-description">
+                    Submit your GCash transaction details to activate your GadgetScout shop subscription.
+                  </p>
+                </div>
+
+                <span class="status-pill">
+                  <ion-icon name="card-outline"></ion-icon>
+                  Monthly Plan
+                </span>
+              </div>
+
+              <div class="premium-plan-card">
+
+                <div class="premium-plan-information">
+                  <div class="premium-plan-icon">
+                    <ion-icon name="shield-checkmark-outline"></ion-icon>
+                  </div>
+
+                  <div>
+                    <span class="premium-plan-label">GADGETSCOUT PREMIUM</span>
+                    <h3>Monthly Subscription</h3>
+                    <p>Subscription access for your repair shop.</p>
+                  </div>
+                </div>
+
+                <div class="premium-price">
+                  <strong>&#8369;{{ premiumPrice }}</strong>
+                  <span>/ month</span>
+                </div>
+
+              </div>
+
+              <div class="payment-pending-notice" *ngIf="hasPendingPayment">
+
+                <div class="payment-notice-icon">
+                  <ion-icon name="time-outline"></ion-icon>
+                </div>
+
+                <div>
+                  <h3>Payment Under Verification</h3>
+                  <p>
+                    Your GCash payment details have been submitted successfully.
+                    Please wait while the Administrator verifies your transaction.
+                    You cannot submit another payment while this one is pending.
+                  </p>
+
+                  <span class="payment-pending-label">
+                    <ion-icon name="time-outline"></ion-icon>
+                    Pending Verification
+                  </span>
+
+                  <p *ngIf="latestPayment?.gcashReferenceNumber">
+                    <strong>Reference Number:</strong>
+                    {{ latestPayment.gcashReferenceNumber }}
+                  </p>
+                </div>
+
+              </div>
+
+              <div class="payment-success-message" *ngIf="latestPaymentStatus === 'approved'">
+
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+                <div>
+                  <h3>Payment Approved!</h3>
+                  <p>
+                    Your GCash payment has been verified by the Administrator.
+                    Your GadgetScout Premium subscription is now active for
+                    30 days from the approval date.
+                  </p>
+
+                  <span>
+                    <ion-icon name="shield-checkmark-outline"></ion-icon>
+                    Active Subscription
+                  </span>
+
+                  <p *ngIf="latestPayment?.gcashReferenceNumber">
+                    <strong>Reference Number:</strong>
+                    {{ latestPayment.gcashReferenceNumber }}
+                  </p>
+                </div>
+
+              </div>
+
+              <div class="payment-error-message" *ngIf="latestPaymentStatus === 'rejected'">
+
+                <ion-icon name="alert-circle-outline"></ion-icon>
+
+                <div>
+                  <h3>Payment Rejected</h3>
+                  <p>
+                    Your submitted payment was not approved by the Administrator.
+                    Please review your GCash transaction details and submit a
+                    new payment for verification.
+                  </p>
+
+                  <span>
+                    <ion-icon name="refresh-outline"></ion-icon>
+                    You may submit a new payment below.
+                  </span>
+
+                  <p *ngIf="latestPayment?.gcashReferenceNumber">
+                    <strong>Reference Number:</strong>
+                    {{ latestPayment.gcashReferenceNumber }}
+                  </p>
+                </div>
+
+              </div>
+
+              <div class="payment-form-container" *ngIf="!hasPendingPayment">
+
+                <div class="payment-instructions">
+                  <h3>
+                    <ion-icon name="information-circle-outline"></ion-icon>
+                    How to Pay
+                  </h3>
+
+                  <ol>
+                    <li>Send &#8369;{{ premiumPrice }} through GCash.</li>
+                    <li>Keep your GCash transaction reference number.</li>
+                    <li>Enter the transaction details in the form below.</li>
+                    <li>Submit your payment details for Admin verification.</li>
+                  </ol>
+                </div>
+
+                <div class="gcash-payment-details">
+
+                  <div class="gcash-heading">
+                    <div class="gcash-icon">
+                      <ion-icon name="card-outline"></ion-icon>
+                    </div>
+
+                    <div>
+                      <h3>GCash Payment Details</h3>
+                      <p>Enter the exact information shown in your GCash transaction.</p>
+                    </div>
+                  </div>
+
+                  <div class="payment-field">
+                    <label for="gcashReferenceNumber">
+                      GCash Reference Number <span>*</span>
+                    </label>
+
+                    <input id="gcashReferenceNumber" type="text" maxlength="50"
+                      autocomplete="off"
+                      placeholder="Enter your GCash reference number"
+                      [value]="gcashReferenceNumber"
+                      (input)="gcashReferenceNumber = $any($event.target).value">
+
+                    <small>Enter the reference number from your GCash transaction receipt.</small>
+                  </div>
+
+                  <div class="payment-field">
+                    <label for="gcashSenderName">
+                      GCash Sender Name <span>*</span>
+                    </label>
+
+                    <input id="gcashSenderName" type="text" maxlength="100"
+                      autocomplete="name"
+                      placeholder="Enter the sender's name"
+                      [value]="gcashSenderName"
+                      (input)="gcashSenderName = $any($event.target).value">
+                  </div>
+
+                  <div class="payment-field">
+                    <label for="transactionDate">
+                      Transaction Date <span>*</span>
+                    </label>
+
+                    <input id="transactionDate" type="date"
+                      [value]="transactionDate"
+                      (input)="transactionDate = $any($event.target).value">
+                  </div>
+
+                  <div class="payment-field">
+                    <label for="paymentNotes">
+                      Additional Notes
+                      <span class="optional-label">(Optional)</span>
+                    </label>
+
+                    <textarea id="paymentNotes" rows="4" maxlength="500"
+                      placeholder="Enter additional payment information if needed..."
+                      [value]="paymentNotes"
+                      (input)="paymentNotes = $any($event.target).value"></textarea>
+                  </div>
+
+                  <div class="payment-error-message" *ngIf="paymentError">
+                    <ion-icon name="alert-circle-outline"></ion-icon>
+                    <span>{{ paymentError }}</span>
+                  </div>
+
+                  <div class="payment-success-message" *ngIf="paymentSuccess">
+                    <ion-icon name="checkmark-circle-outline"></ion-icon>
+                    <span>{{ paymentSuccess }}</span>
+                  </div>
+
+                  <button class="submit-payment-button"
+                    (click)="submitPayment()"
+                    [disabled]="isSubmittingPayment">
+
+                    <ion-spinner *ngIf="isSubmittingPayment" name="crescent"></ion-spinner>
+                    <ion-icon *ngIf="!isSubmittingPayment" name="checkmark-done-circle-outline"></ion-icon>
+
+                    {{ isSubmittingPayment ? 'Submitting Payment...' : 'Submit GCash Payment' }}
+
+                  </button>
+
+                  <p class="payment-security-note">
+                    <ion-icon name="shield-checkmark-outline"></ion-icon>
+                    Your payment submission will be reviewed by the GadgetScout Administrator.
+                  </p>
+
+                </div>
+              </div>
+
+            </section>
+
+          </ng-container>
+
+          <!-- FOOTER -->
+          <footer class="dashboard-footer">
+            <span>&copy; 2026 GadgetScout. All rights reserved.</span>
+            <span>Shop Owner Dashboard</span>
+          </footer>
+
+        </ng-container>
+
+      </div>
+    </main>
+  </div>
+
+</ion-content>

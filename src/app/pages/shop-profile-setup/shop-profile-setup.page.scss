@@ -1,0 +1,83 @@
+ion-content {
+  --background: #f3f7f5;
+}
+
+ion-toolbar {
+  --background: #0b3027;
+  --color: #ffffff;
+}
+
+.profile-container {
+  max-width: 650px;
+  margin: 20px auto;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+}
+
+.intro {
+  margin-bottom: 28px;
+}
+
+.intro h1 {
+  color: #0b3027;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.intro p {
+  color: #68766f;
+  line-height: 1.6;
+}
+
+form h2 {
+  margin-top: 28px;
+  margin-bottom: 16px;
+  color: #0b3027;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+label {
+  display: block;
+  margin: 16px 0 7px;
+  color: #30483e;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #dce5df;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #243b30;
+  font-size: 14px;
+  outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #0b6b4c;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+input[readonly] {
+  background: #f1f4f2;
+}
+
+ion-button {
+  margin-top: 22px;
+  --background: #0b3027;
+  --border-radius: 9px;
+  font-weight: 600;
+}

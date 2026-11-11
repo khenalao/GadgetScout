@@ -1,0 +1,7 @@
+{
+  "name": "GadgetScout",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

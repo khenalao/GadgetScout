@@ -1,0 +1,43 @@
+
+.subtitle,
+.note {
+  color: var(--ion-color-medium);
+  line-height: 1.6;
+}
+
+ion-card {
+  margin: 14px 0;
+  border-radius: 16px;
+}
+
+ion-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.service-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 46px;
+  height: 46px;
+  background: #e8efff;
+  color: #2457c5;
+  border-radius: 12px;
+  font-size: 24px;
+}
+
+ion-card-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+ion-card-content p {
+  line-height: 1.6;
+}
+
+.note {
+  font-size: 12px;
+  margin-top: 20px;
+}

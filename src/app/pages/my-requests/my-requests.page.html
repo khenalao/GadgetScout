@@ -1,0 +1,603 @@
+
+<ion-header class="requests-header">
+  <ion-toolbar>
+    <ion-button
+      slot="start"
+      fill="clear"
+      class="header-back-button"
+      (click)="goToShops()"
+      aria-label="Back to Customer Dashboard">
+      <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+    </ion-button>
+
+    <ion-title>My Requests</ion-title>
+
+    <ion-button
+      slot="end"
+      fill="clear"
+      class="header-refresh-button"
+      (click)="refreshRequests()"
+      aria-label="Refresh requests">
+      <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="my-requests-content">
+
+  <div class="requests-container">
+
+    <!-- PREMIUM PAGE INTRO -->
+    <section class="page-intro">
+      <div class="intro-decoration intro-decoration-one"></div>
+      <div class="intro-decoration intro-decoration-two"></div>
+
+      <div class="intro-content">
+        <div class="intro-icon">
+          <ion-icon name="document-text-outline"></ion-icon>
+        </div>
+
+        <div class="intro-text">
+          <span class="eyebrow">CUSTOMER ACCOUNT</span>
+          <h1>My Repair Requests</h1>
+          <p>
+            Track your repair requests, monitor their progress,
+            and stay updated with your trusted repair shops.
+          </p>
+        </div>
+      </div>
+
+      <div class="intro-bottom">
+        <span>
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+          Your repair activity
+        </span>
+
+        <span>
+          <ion-icon name="refresh-outline"></ion-icon>
+          Real-time updates
+        </span>
+      </div>
+    </section>
+
+    <!-- LOADING -->
+    <div class="loading-container" *ngIf="isLoading">
+      <div class="loading-icon">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+
+      <h3>Loading your requests</h3>
+
+      <p>
+        Please wait while we retrieve your repair activity.
+      </p>
+    </div>
+
+    <!-- ERROR -->
+    <div
+      class="message-card error"
+      *ngIf="!isLoading && errorMessage">
+
+      <div class="message-icon">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+      </div>
+
+      <div class="message-content">
+        <strong>Unable to Load Requests</strong>
+        <p>{{ errorMessage }}</p>
+      </div>
+
+      <ion-button
+        fill="outline"
+        color="danger"
+        size="small"
+        (click)="refreshRequests()">
+        Try Again
+      </ion-button>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div
+      class="empty-state"
+      *ngIf="!isLoading && !errorMessage && requests.length === 0">
+
+      <div class="empty-icon">
+        <ion-icon name="document-text-outline"></ion-icon>
+      </div>
+
+      <span class="eyebrow">NO ACTIVITY YET</span>
+
+      <h2>No Repair Requests Yet</h2>
+
+      <p>
+        You have not submitted a repair request.
+        Browse available repair shops to get started
+        and find the right service for your gadget.
+      </p>
+
+      <ion-button
+        class="browse-button"
+        (click)="goToShops()">
+
+        <ion-icon
+          name="storefront-outline"
+          slot="start">
+        </ion-icon>
+
+        Browse Repair Shops
+      </ion-button>
+    </div>
+
+    <!-- REQUEST LIST -->
+    <div
+      class="request-list"
+      *ngIf="!isLoading && !errorMessage && requests.length > 0">
+
+      <!-- LIST HEADING -->
+      <div class="list-heading">
+        <div>
+          <span class="eyebrow">YOUR ACTIVITY</span>
+
+          <h2>Submitted Requests</h2>
+
+          <p>
+            Here are the repair requests associated with your account.
+          </p>
+        </div>
+
+        <div class="request-count">
+          <strong>{{ filteredRequests.length }}</strong>
+
+          <span>
+            {{ filteredRequests.length === 1 ? 'Request' : 'Requests' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- SEARCH REPAIR REQUESTS -->
+      <div class="requests-search-container">
+
+        <ion-searchbar
+          class="requests-searchbar"
+          [(ngModel)]="searchText"
+          placeholder="Search shop, service, gadget, or status..."
+          animated="true"
+          show-clear-button="focus"
+          inputmode="search"
+          aria-label="Search repair requests">
+        </ion-searchbar>
+
+      </div>
+
+      <!-- NO SEARCH RESULTS -->
+      <div
+        class="no-search-results"
+        *ngIf="filteredRequests.length === 0">
+
+        <div class="empty-icon">
+          <ion-icon name="search-outline"></ion-icon>
+        </div>
+
+        <h3>No Matching Requests</h3>
+
+        <p>
+          Walang repair request na tumutugma sa
+          "{{ searchText }}". Subukan ang ibang keyword.
+        </p>
+
+      </div>
+
+      <!-- INDIVIDUAL REQUEST CARD -->
+      <article
+        class="request-card"
+        *ngFor="let request of filteredRequests">
+
+        <!-- CARD TOP ACCENT -->
+        <div class="card-accent"></div>
+
+        <!-- REQUEST HEADER -->
+        <div class="request-header">
+
+          <div class="request-shop">
+
+            <div class="shop-icon">
+              <ion-icon name="storefront-outline"></ion-icon>
+            </div>
+
+            <div class="shop-heading">
+              <span class="card-label">REPAIR SHOP</span>
+
+              <h3>{{ request.shopName }}</h3>
+
+              <span class="service-name">
+                {{ request.serviceName }}
+              </span>
+            </div>
+
+          </div>
+
+          <div
+            class="status-badge"
+            [ngClass]="request.status">
+
+            <ion-icon
+              [name]="getStatusIcon(request.status)">
+            </ion-icon>
+
+            {{ getStatusLabel(request.status) }}
+
+          </div>
+
+        </div>
+
+        <!-- GADGET DETAILS -->
+        <div class="section-divider"></div>
+
+        <div class="details-heading">
+          <ion-icon name="construct-outline"></ion-icon>
+          <h4>Gadget Information</h4>
+        </div>
+
+        <div class="request-details">
+
+          <div class="detail-item">
+            <span>Gadget Type</span>
+            <strong>{{ request.gadgetType }}</strong>
+          </div>
+
+          <div class="detail-item">
+            <span>Brand</span>
+            <strong>
+              {{ request.gadgetBrand || 'Not specified' }}
+            </strong>
+          </div>
+
+          <div class="detail-item">
+            <span>Model</span>
+            <strong>
+              {{ request.gadgetModel || 'Not specified' }}
+            </strong>
+          </div>
+
+          <div class="detail-item">
+            <span>Contact Number</span>
+            <strong>{{ request.customerContact }}</strong>
+          </div>
+
+        </div>
+
+        <!-- APPOINTMENT SCHEDULE -->
+        <section
+          class="appointment-schedule"
+          *ngIf="request.appointmentDate || request.appointmentTime">
+
+          <div class="appointment-heading">
+
+            <div class="appointment-heading-title">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <h4>Appointment Schedule</h4>
+            </div>
+
+            <span
+              class="appointment-status"
+              [ngClass]="request.status">
+
+              <ion-icon
+                [name]="
+                  request.status === 'accepted' ||
+                  request.status === 'in-progress' ||
+                  request.status === 'completed'
+                    ? 'checkmark-circle-outline'
+                    : request.status === 'rejected'
+                      ? 'close-circle-outline'
+                      : 'time-outline'
+                ">
+              </ion-icon>
+
+              {{ getAppointmentStatusLabel(request.status) }}
+
+            </span>
+
+          </div>
+
+          <div class="appointment-details">
+
+            <div class="appointment-detail-item">
+
+              <div class="appointment-detail-icon">
+                <ion-icon name="calendar-outline"></ion-icon>
+              </div>
+
+              <div>
+                <span>Preferred Date</span>
+
+                <strong>
+                  {{
+                    request.appointmentDate
+                      ? (request.appointmentDate | date:'MMMM d, y':'UTC')
+                      : 'Not specified'
+                  }}
+                </strong>
+              </div>
+
+            </div>
+
+            <div class="appointment-detail-item">
+
+              <div class="appointment-detail-icon">
+                <ion-icon name="time-outline"></ion-icon>
+              </div>
+
+              <div>
+                <span>Preferred Time</span>
+
+                <strong>
+                  {{
+                    request.appointmentTime
+                      ? ('2000-01-01T' + request.appointmentTime | date:'h:mm a':'UTC')
+                      : 'Not specified'
+                  }}
+                </strong>
+              </div>
+
+            </div>
+
+          </div>
+
+          <p class="appointment-message">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            {{ getAppointmentStatusMessage(request.status) }}
+          </p>
+
+        </section>
+
+        <!-- ISSUE DESCRIPTION -->
+        <div class="issue-description">
+
+          <div class="issue-heading">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <span>Problem Description</span>
+          </div>
+
+          <p>{{ request.issueDescription }}</p>
+
+        </div>
+
+        <!-- REQUEST FOOTER -->
+        <div class="request-footer">
+
+          <div class="footer-detail">
+
+            <div class="footer-icon">
+              <ion-icon name="calendar-outline"></ion-icon>
+            </div>
+
+            <div>
+              <span>Request Date</span>
+
+              <strong>
+                {{
+                  request.createdAt?.toDate
+                    ? (request.createdAt.toDate() | date:'medium')
+                    : 'Processing...'
+                }}
+              </strong>
+            </div>
+
+          </div>
+
+          <div class="footer-detail request-reference">
+
+            <div class="footer-icon">
+              <ion-icon name="finger-print-outline"></ion-icon>
+            </div>
+
+            <div>
+              <span>Request ID</span>
+              <strong>{{ request.id }}</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- STATUS INFORMATION -->
+        <div class="status-information">
+
+          <div class="status-info-icon">
+            <ion-icon name="information-circle-outline"></ion-icon>
+          </div>
+
+          <p [ngSwitch]="request.status">
+
+            <ng-container *ngSwitchCase="'pending'">
+              Your request has been sent. Waiting for the shop owner to review it.
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'accepted'">
+              The shop owner accepted your repair request.
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'rejected'">
+              The shop owner did not accept this repair request.
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'in-progress'">
+              Your repair request is currently being processed.
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'completed'">
+              The shop has marked this repair request as completed.
+            </ng-container>
+
+            <ng-container *ngSwitchDefault>
+              Check this request again later for updates.
+            </ng-container>
+
+          </p>
+
+        </div>
+
+        <!-- CUSTOMER RATING AND REVIEW -->
+        <section
+          class="rating-section"
+          *ngIf="request.status === 'completed'">
+
+          <div class="rating-heading">
+
+            <div class="rating-heading-content">
+              <span class="eyebrow">CUSTOMER FEEDBACK</span>
+
+              <h3>Rate Your Experience</h3>
+
+              <p>
+                Share your experience with {{ request.shopName }}.
+              </p>
+            </div>
+
+            <div class="rating-heading-icon">
+              <ion-icon name="star"></ion-icon>
+            </div>
+
+          </div>
+
+          <!-- ALREADY REVIEWED -->
+          <div
+            class="review-submitted"
+            *ngIf="reviewedRequests[request.id]">
+
+            <div class="submitted-icon">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+            </div>
+
+            <div>
+              <strong>Review Submitted</strong>
+
+              <p>
+                Thank you for rating this repair shop.
+                Your feedback has been recorded.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- REVIEW FORM -->
+          <div
+            class="review-form"
+            *ngIf="!reviewedRequests[request.id]">
+
+            <label class="rating-label">Your Rating</label>
+
+            <div
+              class="star-rating"
+              role="group"
+              aria-label="Select a rating from one to five stars">
+
+              <button
+                type="button"
+                class="star-button"
+                *ngFor="let starNumber of [1, 2, 3, 4, 5]"
+                [class.selected]="isStarSelected(request.id, starNumber)"
+                [attr.aria-label]="'Rate ' + starNumber + ' out of 5 stars'"
+                [attr.aria-pressed]="isStarSelected(request.id, starNumber)"
+                (click)="setRating(request.id, starNumber)">
+
+                <ion-icon
+                  [name]="isStarSelected(request.id, starNumber) ? 'star' : 'star-outline'">
+                </ion-icon>
+
+              </button>
+
+            </div>
+
+            <p class="rating-hint">
+              {{
+                ratingSelections[request.id]
+                  ? ratingSelections[request.id] + ' out of 5 stars selected'
+                  : 'Tap a star to rate your experience'
+              }}
+            </p>
+
+            <div class="review-field">
+
+              <label [for]="'review-' + request.id">
+                Write a Review
+                <span>(Optional)</span>
+              </label>
+
+              <textarea
+                [id]="'review-' + request.id"
+                [(ngModel)]="reviewTexts[request.id]"
+                maxlength="1000"
+                rows="4"
+                placeholder="Tell us about your experience with this repair shop...">
+              </textarea>
+
+              <small>
+                {{ (reviewTexts[request.id] || '').length }}/1000 characters
+              </small>
+
+            </div>
+
+            <!-- REVIEW ERROR -->
+            <div
+              class="review-message error"
+              *ngIf="reviewErrors[request.id]">
+
+              <ion-icon name="alert-circle-outline"></ion-icon>
+
+              <p>{{ reviewErrors[request.id] }}</p>
+
+            </div>
+
+            <!-- REVIEW SUCCESS -->
+            <div
+              class="review-message success"
+              *ngIf="reviewSuccess[request.id]">
+
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+              <p>{{ reviewSuccess[request.id] }}</p>
+
+            </div>
+
+            <!-- SUBMIT REVIEW -->
+            <ion-button
+              expand="block"
+              class="submit-review-button"
+              [disabled]="
+                !ratingSelections[request.id] ||
+                submittingReviews[request.id]
+              "
+              (click)="submitReview(request)">
+
+              <ion-spinner
+                *ngIf="submittingReviews[request.id]"
+                name="crescent">
+              </ion-spinner>
+
+              <ion-icon
+                *ngIf="!submittingReviews[request.id]"
+                name="star"
+                slot="start">
+              </ion-icon>
+
+              {{
+                submittingReviews[request.id]
+                  ? 'Submitting Review...'
+                  : 'Submit Rating & Review'
+              }}
+
+            </ion-button>
+
+          </div>
+
+        </section>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</ion-content>

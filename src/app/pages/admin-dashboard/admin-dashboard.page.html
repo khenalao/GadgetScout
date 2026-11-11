@@ -1,0 +1,890 @@
+
+<ion-content [fullscreen]="true" class="admin-content">
+  <div class="admin-layout" [class.sidebar-collapsed]="isSidebarCollapsed">
+
+    <!-- Mobile Overlay -->
+    <div
+      class="sidebar-overlay"
+      *ngIf="mobileMenuOpen"
+      (click)="toggleMobileMenu()">
+    </div>
+
+    <!-- Sidebar -->
+    <aside
+      class="admin-sidebar"
+      [class.mobile-open]="mobileMenuOpen">
+
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <ion-icon name="construct-outline"></ion-icon>
+        </div>
+
+        <div class="brand-text">
+          <h2>GadgetScout</h2>
+          <p>ADMIN PANEL</p>
+        </div>
+
+        <button
+          class="mobile-close"
+          type="button"
+          (click)="toggleMobileMenu()"
+          aria-label="Close sidebar">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </div>
+
+      <div class="sidebar-profile">
+        <div class="profile-avatar">
+          <ion-icon name="person-outline"></ion-icon>
+        </div>
+
+        <div class="profile-details">
+          <h3>{{ adminName }}</h3>
+          <p>Administrator</p>
+        </div>
+      </div>
+
+      <div class="sidebar-menu">
+        <p class="menu-heading">MAIN MENU</p>
+
+        <button
+          *ngFor="let item of navItems"
+          type="button"
+          class="nav-item"
+          [class.active]="activeSection === item.section"
+          (click)="selectSection(item.section)">
+
+          <ion-icon [name]="item.icon"></ion-icon>
+          <span>{{ item.label }}</span>
+
+          <span
+            class="nav-count"
+            *ngIf="item.section === 'applications' && pendingApplications.length > 0">
+            {{ pendingApplications.length }}
+          </span>
+
+          <span
+            class="nav-count"
+            *ngIf="item.section === 'profile-review' && pendingShopProfiles.length > 0">
+            {{ pendingShopProfiles.length }}
+          </span>
+
+          <span
+            class="nav-count"
+            *ngIf="item.section === 'payments' && pendingPayments.length > 0">
+            {{ pendingPayments.length }}
+          </span>
+        </button>
+      </div>
+
+      <div class="sidebar-bottom">
+        <button
+          type="button"
+          class="logout-button"
+          (click)="logout()">
+          <ion-icon name="log-out-outline"></ion-icon>
+          <span>Logout</span>
+        </button>
+      </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+
+      <!-- Topbar -->
+      <header class="admin-topbar">
+        <div class="topbar-left">
+
+          <!-- Desktop Sidebar Toggle -->
+          <button
+            type="button"
+            class="desktop-menu-button"
+            (click)="toggleSidebar()"
+            [attr.aria-label]="isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+            <ion-icon name="menu-outline"></ion-icon>
+          </button>
+
+          <!-- Mobile Sidebar Toggle -->
+          <button
+            type="button"
+            class="mobile-menu-button"
+            (click)="toggleMobileMenu()"
+            aria-label="Open sidebar">
+            <ion-icon name="menu-outline"></ion-icon>
+          </button>
+
+          <div>
+            <h1>{{ pageTitle }}</h1>
+            <p>Welcome to your GadgetScout administration panel.</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="admin-top-profile">
+            <div class="top-avatar">
+              <ion-icon name="person-outline"></ion-icon>
+            </div>
+            <span>{{ adminName }}</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Notifications -->
+      <div class="dashboard-message success-message" *ngIf="successMessage">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        <span>{{ successMessage }}</span>
+        <button type="button" (click)="successMessage = ''">×</button>
+      </div>
+
+      <div class="dashboard-message error-message" *ngIf="errorMessage">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <span>{{ errorMessage }}</span>
+        <button type="button" (click)="errorMessage = ''">×</button>
+      </div>
+
+      <!-- Dashboard Section -->
+      <section *ngIf="activeSection === 'dashboard'">
+
+        <div class="section-heading">
+          <div>
+            <h2>Dashboard Overview</h2>
+            <p>Monitor your GadgetScout platform statistics.</p>
+          </div>
+
+          <button
+            type="button"
+            class="refresh-button"
+            (click)="loadDashboardData(); loadApplications(); loadShopProfiles(); loadPendingPayments()">
+            <ion-icon name="refresh-outline"></ion-icon>
+            Refresh
+          </button>
+        </div>
+
+        <div class="stats-grid">
+
+          <div class="stat-card">
+            <div class="stat-icon shops-icon">
+              <ion-icon name="storefront-outline"></ion-icon>
+            </div>
+            <div class="stat-details">
+              <p>Total Repair Shops</p>
+              <h2>{{ totalShops }}</h2>
+              <span>Registered shop profiles</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon customers-icon">
+              <ion-icon name="people-outline"></ion-icon>
+            </div>
+            <div class="stat-details">
+              <p>Total Customers</p>
+              <h2>{{ totalCustomers }}</h2>
+              <span>Registered customer accounts</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon pending-icon">
+              <ion-icon name="time-outline"></ion-icon>
+            </div>
+            <div class="stat-details">
+              <p>Pending Applications</p>
+              <h2>{{ pendingApplications.length }}</h2>
+              <span>Waiting for account approval</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon pending-icon">
+              <ion-icon name="document-text-outline"></ion-icon>
+            </div>
+            <div class="stat-details">
+              <p>Pending Shop Profiles</p>
+              <h2>{{ pendingShopProfiles.length }}</h2>
+              <span>Waiting for profile review</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon approved-icon">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+            </div>
+            <div class="stat-details">
+              <p>Approved Shops</p>
+              <h2>{{ approvedShops }}</h2>
+              <span>Approved shop profiles</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon payment-icon">
+              <ion-icon name="card-outline"></ion-icon>
+            </div>
+            <div class="stat-details">
+              <p>Pending Payments</p>
+              <h2>{{ pendingPayments.length }}</h2>
+              <span>Awaiting payment verification</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Recent Applications -->
+        <div class="dashboard-panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Recent Shop Applications</h3>
+              <p>Shop owner registrations awaiting account review.</p>
+            </div>
+
+            <button
+              type="button"
+              class="view-all-button"
+              (click)="selectSection('applications')">
+              View All
+            </button>
+          </div>
+
+          <div
+            class="loading-state"
+            *ngIf="loadingApplications && pendingApplications.length === 0">
+            Loading applications...
+          </div>
+
+          <div
+            class="empty-state"
+            *ngIf="!loadingApplications && pendingApplications.length === 0">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <h4>No Pending Applications</h4>
+            <p>New shop owner applications will appear here.</p>
+          </div>
+
+          <div
+            class="application-list"
+            *ngIf="pendingApplications.length > 0">
+
+            <div
+              class="application-item"
+              *ngFor="let application of (pendingApplications | slice:0:3); trackBy: trackByUid">
+
+              <div class="application-info">
+                <div class="application-avatar">
+                  <ion-icon name="person-outline"></ion-icon>
+                </div>
+
+                <div>
+                  <h4>{{ application.name }}</h4>
+                  <p>{{ application.email }}</p>
+                  <span class="application-status">Pending Review</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="review-button"
+                (click)="selectSection('applications')">
+                Review
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Shop Profiles -->
+        <div class="dashboard-panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Shop Profiles Awaiting Review</h3>
+              <p>Shop profiles submitted by approved shop owners.</p>
+            </div>
+
+            <button
+              type="button"
+              class="view-all-button"
+              (click)="selectSection('profile-review')">
+              View All
+            </button>
+          </div>
+
+          <div
+            class="loading-state"
+            *ngIf="loadingShopProfiles && pendingShopProfiles.length === 0">
+            Loading shop profiles...
+          </div>
+
+          <div
+            class="empty-state"
+            *ngIf="!loadingShopProfiles && pendingShopProfiles.length === 0">
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+            <h4>No Pending Shop Profiles</h4>
+            <p>Submitted shop profiles will appear here.</p>
+          </div>
+
+          <div
+            class="application-list"
+            *ngIf="pendingShopProfiles.length > 0">
+
+            <div
+              class="application-item"
+              *ngFor="let profile of (pendingShopProfiles | slice:0:3); trackBy: trackByProfileUid">
+
+              <div class="application-info">
+                <div class="application-avatar">
+                  <ion-icon name="storefront-outline"></ion-icon>
+                </div>
+
+                <div>
+                  <h4>{{ profile.shopName }}</h4>
+                  <p>{{ profile.ownerName }} · {{ profile.email }}</p>
+                  <span class="application-status">Pending Review</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="review-button"
+                (click)="selectSection('profile-review')">
+                Review
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dashboard-panel quick-actions-panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Quick Actions</h3>
+              <p>Manage your platform efficiently.</p>
+            </div>
+          </div>
+
+          <div class="quick-actions">
+
+            <button
+              type="button"
+              class="quick-action"
+              (click)="selectSection('applications')">
+              <ion-icon name="document-text-outline"></ion-icon>
+              <span>Review Applications</span>
+            </button>
+
+            <button
+              type="button"
+              class="quick-action"
+              (click)="selectSection('profile-review')">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              <span>Review Shop Profiles</span>
+            </button>
+
+            <button
+              type="button"
+              class="quick-action"
+              (click)="selectSection('shops')">
+              <ion-icon name="storefront-outline"></ion-icon>
+              <span>Manage Repair Shops</span>
+            </button>
+
+            <button
+              type="button"
+              class="quick-action"
+              (click)="selectSection('customers')">
+              <ion-icon name="people-outline"></ion-icon>
+              <span>View Customers</span>
+            </button>
+
+            <button
+              type="button"
+              class="quick-action"
+              (click)="selectSection('reports')">
+              <ion-icon name="bar-chart-outline"></ion-icon>
+              <span>View Reports</span>
+            </button>
+
+            <button
+              type="button"
+              class="quick-action"
+              (click)="selectSection('payments')">
+              <ion-icon name="card-outline"></ion-icon>
+              <span>Verify Payments</span>
+            </button>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Shop Applications Section -->
+      <section *ngIf="activeSection === 'applications'">
+
+        <div class="section-heading">
+          <div>
+            <h2>Shop Owner Applications</h2>
+            <p>Review and manage registered shop owner accounts.</p>
+          </div>
+
+          <button
+            type="button"
+            class="refresh-button"
+            (click)="loadApplications()">
+            <ion-icon name="refresh-outline"></ion-icon>
+            Refresh
+          </button>
+        </div>
+
+        <div class="application-summary">
+          <div>
+            <span>Pending Applications</span>
+            <h2>{{ pendingApplications.length }}</h2>
+          </div>
+          <ion-icon name="document-text-outline"></ion-icon>
+        </div>
+
+        <div
+          class="loading-state"
+          *ngIf="loadingApplications && pendingApplications.length === 0">
+          Loading shop applications...
+        </div>
+
+        <div
+          class="empty-state"
+          *ngIf="!loadingApplications && pendingApplications.length === 0">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+          <h3>All Caught Up!</h3>
+          <p>There are currently no pending shop owner applications.</p>
+        </div>
+
+        <div
+          class="application-list"
+          *ngIf="pendingApplications.length > 0">
+
+          <div
+            class="application-item"
+            *ngFor="let application of pendingApplications; trackBy: trackByUid">
+
+            <div class="application-info">
+              <div class="application-avatar">
+                <ion-icon name="person-outline"></ion-icon>
+              </div>
+
+              <div class="application-details">
+                <h4>{{ application.name }}</h4>
+                <p>{{ application.email }}</p>
+
+                <span class="application-status">
+                  <ion-icon name="time-outline"></ion-icon>
+                  Pending Review
+                </span>
+
+                <p *ngIf="application.createdAt">
+                  Registered:
+                  {{ application.createdAt?.toDate ? (application.createdAt.toDate() | date:'medium') : 'Date unavailable' }}
+                </p>
+              </div>
+            </div>
+
+            <div class="application-actions">
+              <button
+                type="button"
+                class="approve-button"
+                [disabled]="updatingApplicationId !== null || updatingProfileId !== null"
+                (click)="approveApplication(application)">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                {{ updatingApplicationId === application.uid ? 'Processing...' : 'Approve' }}
+              </button>
+
+              <button
+                type="button"
+                class="reject-button"
+                [disabled]="updatingApplicationId !== null || updatingProfileId !== null"
+                (click)="rejectApplication(application)">
+                <ion-icon name="close-circle-outline"></ion-icon>
+                Reject
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Shop Profile Review Section -->
+      <section *ngIf="activeSection === 'profile-review'">
+
+        <div class="section-heading">
+          <div>
+            <h2>Shop Profile Review</h2>
+            <p>Review shop information before approving the profile.</p>
+          </div>
+
+          <button
+            type="button"
+            class="refresh-button"
+            (click)="loadShopProfiles()">
+            <ion-icon name="refresh-outline"></ion-icon>
+            Refresh
+          </button>
+        </div>
+
+        <div class="application-summary">
+          <div>
+            <span>Pending Shop Profiles</span>
+            <h2>{{ pendingShopProfiles.length }}</h2>
+          </div>
+          <ion-icon name="storefront-outline"></ion-icon>
+        </div>
+
+        <div
+          class="loading-state"
+          *ngIf="loadingShopProfiles && pendingShopProfiles.length === 0">
+          Loading shop profiles...
+        </div>
+
+        <div
+          class="empty-state"
+          *ngIf="!loadingShopProfiles && pendingShopProfiles.length === 0">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+          <h3>No Pending Shop Profiles</h3>
+          <p>There are currently no shop profiles waiting for review.</p>
+        </div>
+
+        <div
+          class="application-list"
+          *ngIf="pendingShopProfiles.length > 0">
+
+          <div
+            class="application-item"
+            *ngFor="let profile of pendingShopProfiles; trackBy: trackByProfileUid">
+
+            <div class="application-info">
+              <div class="application-avatar">
+                <ion-icon name="storefront-outline"></ion-icon>
+              </div>
+
+              <div class="application-details">
+                <h3>{{ profile.shopName }}</h3>
+
+                <p><strong>Owner:</strong> {{ profile.ownerName }}</p>
+                <p><strong>Email:</strong> {{ profile.email }}</p>
+                <p><strong>Contact:</strong> {{ profile.contactNumber }}</p>
+                <p><strong>Address:</strong> {{ profile.address }}</p>
+                <p><strong>Category:</strong> {{ profile.category }}</p>
+                <p><strong>Description:</strong> {{ profile.description }}</p>
+                <p><strong>Services:</strong> {{ profile.services }}</p>
+
+                <span class="application-status">
+                  <ion-icon name="time-outline"></ion-icon>
+                  Pending Profile Review
+                </span>
+              </div>
+            </div>
+
+            <div class="application-actions">
+              <button
+                type="button"
+                class="approve-button"
+                [disabled]="updatingApplicationId !== null || updatingProfileId !== null"
+                (click)="approveShopProfile(profile)">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                {{ updatingProfileId === profile.uid ? 'Processing...' : 'Approve Profile' }}
+              </button>
+
+              <button
+                type="button"
+                class="reject-button"
+                [disabled]="updatingApplicationId !== null || updatingProfileId !== null"
+                (click)="rejectShopProfile(profile)">
+                <ion-icon name="close-circle-outline"></ion-icon>
+                Reject Profile
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Payment Verification Section -->
+      <section *ngIf="activeSection === 'payments'">
+
+        <div class="section-heading">
+          <div>
+            <h2>Payment Verification</h2>
+            <p>Review GCash payment submissions from shop owners.</p>
+          </div>
+
+          <button
+            type="button"
+            class="refresh-button"
+            (click)="loadPendingPayments()">
+            <ion-icon name="refresh-outline"></ion-icon>
+            Refresh
+          </button>
+        </div>
+
+        <div class="application-summary payment-summary">
+          <div>
+            <span>Pending Payments</span>
+            <h2>{{ pendingPayments.length }}</h2>
+          </div>
+          <ion-icon name="card-outline"></ion-icon>
+        </div>
+
+        <div
+          class="loading-state"
+          *ngIf="loadingPayments && pendingPayments.length === 0">
+          Loading payment submissions...
+        </div>
+
+        <div
+          class="empty-state"
+          *ngIf="!loadingPayments && pendingPayments.length === 0">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+          <h3>No Pending Payments</h3>
+          <p>New GCash payment submissions will appear here.</p>
+        </div>
+
+        <div
+          class="application-list payment-list"
+          *ngIf="pendingPayments.length > 0">
+
+          <div
+            class="application-item payment-item"
+            *ngFor="let payment of pendingPayments; trackBy: trackByPaymentId">
+
+            <div class="application-info payment-info">
+
+              <div class="application-avatar payment-avatar">
+                <ion-icon name="card-outline"></ion-icon>
+              </div>
+
+              <div class="application-details payment-details">
+
+                <h3>{{ payment.shopName || 'Unnamed Shop' }}</h3>
+
+                <span class="application-status">
+                  <ion-icon name="time-outline"></ion-icon>
+                  Pending Verification
+                </span>
+
+                <div class="payment-information">
+
+                  <p>
+                    <strong>Shop Owner UID:</strong>
+                    {{ payment.ownerUid }}
+                  </p>
+
+                  <p>
+                    <strong>Payment Plan:</strong>
+                    {{ payment.plan | titlecase }}
+                  </p>
+
+                  <p>
+                    <strong>Amount:</strong>
+                    {{ payment.amount | currency:'PHP':'symbol':'1.2-2' }}
+                  </p>
+
+                  <p>
+                    <strong>Payment Method:</strong>
+                    {{ payment.paymentMethod }}
+                  </p>
+
+                  <p>
+                    <strong>GCash Reference Number:</strong>
+                    {{ payment.gcashReferenceNumber }}
+                  </p>
+
+                  <p>
+                    <strong>Sender Name:</strong>
+                    {{ payment.gcashSenderName }}
+                  </p>
+
+                  <p>
+                    <strong>Transaction Date:</strong>
+                    {{ payment.transactionDate }}
+                  </p>
+
+                  <p>
+                    <strong>Submitted:</strong>
+                    {{ formatPaymentDate(payment.submittedAt) }}
+                  </p>
+
+                  <p *ngIf="payment.notes">
+                    <strong>Notes:</strong>
+                    {{ payment.notes }}
+                  </p>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="application-actions payment-actions">
+
+              <button
+                type="button"
+                class="approve-button"
+                [disabled]="updatingPaymentId !== null"
+                (click)="approvePayment(payment)">
+
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+                {{ updatingPaymentId === payment.id ? 'Processing...' : 'Approve Payment' }}
+              </button>
+
+              <button
+                type="button"
+                class="reject-button"
+                [disabled]="updatingPaymentId !== null"
+                (click)="rejectPayment(payment)">
+
+                <ion-icon name="close-circle-outline"></ion-icon>
+                Reject Payment
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Repair Shops Section -->
+      <section *ngIf="activeSection === 'shops'">
+
+        <div class="section-heading">
+          <div>
+            <h2>Repair Shops</h2>
+            <p>Overview of registered repair shop profiles.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-panel">
+          <div class="empty-state">
+            <ion-icon name="storefront-outline"></ion-icon>
+            <h3>Repair Shop Management</h3>
+            <p>Total registered shop profiles: {{ totalShops }}</p>
+            <p>Approved shop profiles: {{ approvedShops }}</p>
+            <p>Shop profile management will be added in the next update.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Customers Section -->
+      <section *ngIf="activeSection === 'customers'">
+
+        <div class="section-heading">
+          <div>
+            <h2>Customers</h2>
+            <p>Overview of registered GadgetScout customers.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-panel">
+          <div class="empty-state">
+            <ion-icon name="people-outline"></ion-icon>
+            <h3>Registered Customers</h3>
+            <h2>{{ totalCustomers }}</h2>
+            <p>Total customer accounts in the system.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Reports Section -->
+      <section *ngIf="activeSection === 'reports'">
+
+        <div class="section-heading">
+          <div>
+            <h2>Reports</h2>
+            <p>GadgetScout platform statistics.</p>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+
+          <div class="stat-card">
+            <div class="stat-icon shops-icon">
+              <ion-icon name="storefront-outline"></ion-icon>
+            </div>
+            <div class="stat-details">
+              <p>Total Repair Shops</p>
+              <h2>{{ totalShops }}</h2>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon customers-icon">
+              <ion-icon name="people-outline"></ion-icon>
+            </div>
+            <div class="stat-details">
+              <p>Total Customers</p>
+              <h2>{{ totalCustomers }}</h2>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon pending-icon">
+              <ion-icon name="time-outline"></ion-icon>
+            </div>
+            <div class="stat-details">
+              <p>Pending Applications</p>
+              <h2>{{ pendingApplications.length }}</h2>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon pending-icon">
+              <ion-icon name="document-text-outline"></ion-icon>
+            </div>
+            <div class="stat-details">
+              <p>Pending Shop Profiles</p>
+              <h2>{{ pendingShopProfiles.length }}</h2>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon approved-icon">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+            </div>
+            <div class="stat-details">
+              <p>Approved Shops</p>
+              <h2>{{ approvedShops }}</h2>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon payment-icon">
+              <ion-icon name="card-outline"></ion-icon>
+            </div>
+            <div class="stat-details">
+              <p>Pending Payments</p>
+              <h2>{{ pendingPayments.length }}</h2>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Settings Section -->
+      <section *ngIf="activeSection === 'settings'">
+
+        <div class="section-heading">
+          <div>
+            <h2>Settings</h2>
+            <p>Administrator account settings.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-panel">
+          <div class="empty-state">
+            <ion-icon name="settings-outline"></ion-icon>
+            <h3>Admin Settings</h3>
+            <p>Additional administrator settings will be added here.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="admin-footer">
+        <p>© 2026 GadgetScout. All rights reserved.</p>
+        <p>Admin Dashboard</p>
+      </footer>
+
+    </main>
+  </div>
+</ion-content>

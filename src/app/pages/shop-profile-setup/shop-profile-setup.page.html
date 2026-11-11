@@ -1,0 +1,119 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-title>Shop Profile Setup</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="profile-container">
+
+    <div class="intro">
+      <h1>Register Your Repair Shop</h1>
+      <p>
+        Complete your shop information so the GadgetScout
+        administrator can review your application.
+      </p>
+    </div>
+
+    <form (ngSubmit)="submitProfile()">
+
+      <h2>Owner Information</h2>
+
+      <label>Owner Name *</label>
+      <input
+        type="text"
+        name="ownerName"
+        [(ngModel)]="ownerName"
+        required
+      />
+
+      <label>Email Address</label>
+      <input
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        readonly
+      />
+
+      <h2>Shop Information</h2>
+
+      <label>Shop Name *</label>
+      <input
+        type="text"
+        name="shopName"
+        [(ngModel)]="shopName"
+        placeholder="Enter your repair shop name"
+        required
+      />
+
+      <label>Contact Number *</label>
+      <input
+        type="tel"
+        name="contactNumber"
+        [(ngModel)]="contactNumber"
+        placeholder="Enter contact number"
+        required
+      />
+
+      <label>Shop Address *</label>
+      <textarea
+        name="address"
+        [(ngModel)]="address"
+        placeholder="Enter complete shop address"
+        required
+      ></textarea>
+
+      <label>Shop Category *</label>
+      <select
+        name="category"
+        [(ngModel)]="category"
+        required
+      >
+        <option value="">Select category</option>
+        <option value="Smartphone Repair">Smartphone Repair</option>
+        <option value="Laptop Repair">Laptop Repair</option>
+        <option value="Tablet Repair">Tablet Repair</option>
+        <option value="Computer Repair">Computer Repair</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label>Shop Description *</label>
+      <textarea
+        name="description"
+        [(ngModel)]="description"
+        placeholder="Describe your repair shop"
+        required
+      ></textarea>
+
+      <label>Services Offered *</label>
+      <textarea
+        name="services"
+        [(ngModel)]="services"
+        placeholder="Example: Screen replacement, battery repair, software troubleshooting"
+        required
+      ></textarea>
+
+      <ion-button
+        expand="block"
+        type="submit"
+        [disabled]="loading"
+      >
+        {{ loading ? 'Submitting...' : 'Submit Shop Profile' }}
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        fill="clear"
+        color="medium"
+        type="button"
+        (click)="logout()"
+      >
+        Log Out
+      </ion-button>
+
+    </form>
+
+  </div>
+
+</ion-content>

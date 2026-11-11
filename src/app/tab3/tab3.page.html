@@ -1,0 +1,37 @@
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Repair Services</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h2>Explore Our Services</h2>
+
+  <p class="subtitle">
+    Find the right repair service for your gadget.
+  </p>
+
+  <ion-card *ngFor="let service of services">
+    <ion-card-header>
+      <div class="service-icon">
+        <ion-icon [name]="service.icon"></ion-icon>
+      </div>
+
+      <ion-card-title>{{ service.name }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>{{ service.description }}</p>
+
+      <ion-badge color="primary">
+        {{ service.price }}
+      </ion-badge>
+    </ion-card-content>
+  </ion-card>
+
+  <p class="note">
+    Note: Prices are sample estimates and may vary
+    depending on the repair shop and gadget condition.
+  </p>
+</ion-content>

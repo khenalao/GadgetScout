@@ -1,0 +1,274 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>GadgetScout</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="page-container">
+
+    <!-- BACK TO CUSTOMER DASHBOARD -->
+    <div class="back-navigation">
+      <ion-button
+        fill="clear"
+        class="back-dashboard-button"
+        (click)="goToDashboard()">
+
+        <ion-icon
+          slot="start"
+          name="arrow-back-outline">
+        </ion-icon>
+
+        Back to Customer Dashboard
+
+      </ion-button>
+    </div>
+
+    <!-- Page Heading -->
+    <section class="page-heading">
+      <p class="eyebrow">FIND YOUR TRUSTED REPAIR SHOP</p>
+
+      <h1>Explore Repair Shops</h1>
+
+      <p class="subtitle">
+        Discover approved premium repair shops near your preferred location.
+      </p>
+    </section>
+
+    <!-- Search -->
+    <ion-searchbar
+      [(ngModel)]="searchText"
+      placeholder="Search shops, services, or address"
+      aria-label="Search repair shops"
+      [debounce]="200">
+    </ion-searchbar>
+
+    <!-- Loading -->
+    <div class="loading-state" *ngIf="isLoading">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading premium repair shops...</p>
+    </div>
+
+    <!-- Error -->
+    <div
+      class="error-state"
+      *ngIf="!isLoading && errorMessage">
+
+      <p>{{ errorMessage }}</p>
+
+      <ion-button (click)="loadApprovedShops()">
+        Try Again
+      </ion-button>
+    </div>
+
+    <ng-container *ngIf="!isLoading && !errorMessage">
+
+      <!-- Empty State -->
+      <div
+        class="premium-empty-state"
+        *ngIf="shops.length === 0">
+
+        <div class="empty-state-icon">
+          <ion-icon name="storefront-outline"></ion-icon>
+        </div>
+
+        <span class="empty-state-label">
+          GADGETSCOUT DIRECTORY
+        </span>
+
+        <h2>Discover Trusted Repair Shops</h2>
+
+        <p class="empty-description">
+          Premium repair shops will appear here soon.
+        </p>
+
+        <p class="empty-subtext">
+          Check back later for newly published repair shops.
+        </p>
+
+        <div class="empty-state-footer">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+
+          <span>
+            Find trusted gadget repair services with GadgetScout.
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Map Section -->
+      <section
+        class="map-section"
+        *ngIf="shops.length > 0">
+
+        <div class="results-heading">
+
+          <div>
+            <h2>Repair Shops Map</h2>
+
+            <p>
+              See the locations of approved premium shops.
+            </p>
+          </div>
+
+          <ion-badge color="success">
+            {{ shopsWithLocation.length }} locations
+          </ion-badge>
+
+        </div>
+
+        <div
+          id="customerShopsMap"
+          class="customer-shops-map">
+        </div>
+
+        <p class="map-note">
+          <ion-icon name="location-outline"></ion-icon>
+
+          Select a map marker to view the shop name and address.
+        </p>
+
+      </section>
+
+      <!-- Directory Section -->
+      <section
+        class="directory-section"
+        *ngIf="shops.length > 0">
+
+        <div class="results-heading">
+
+          <h2>Premium Repair Shops</h2>
+
+          <ion-badge color="success">
+            {{ filteredShops.length }} results
+          </ion-badge>
+
+        </div>
+
+        <!-- No Search Results -->
+        <div
+          class="empty-state"
+          *ngIf="filteredShops.length === 0">
+
+          <div class="empty-icon">🔎</div>
+
+          <h3>No matching results</h3>
+
+          <p>
+            Try searching using another shop name, service, or address.
+          </p>
+
+        </div>
+
+        <!-- Shop Cards -->
+        <div class="shop-list">
+
+          <ion-card
+            class="shop-card"
+            *ngFor="let shop of filteredShops">
+
+            <ion-card-content>
+
+              <div class="shop-info">
+
+                <div class="shop-badges">
+
+                  <ion-badge color="success">
+                    Approved
+                  </ion-badge>
+
+                  <ion-badge color="warning">
+                    Premium
+                  </ion-badge>
+
+                </div>
+
+                <h3>{{ shop.shopName }}</h3>
+
+                <p
+                  class="shop-owner"
+                  *ngIf="shop.ownerName">
+                  Owner: {{ shop.ownerName }}
+                </p>
+
+                <p
+                  class="shop-category"
+                  *ngIf="shop.category">
+                  {{ shop.category }}
+                </p>
+
+                <p
+                  class="shop-description"
+                  *ngIf="shop.description">
+                  {{ shop.description }}
+                </p>
+
+                <p class="shop-address">
+                  <ion-icon name="location-outline"></ion-icon>
+                  {{ shop.address }}
+                </p>
+
+                <p
+                  class="shop-contact"
+                  *ngIf="shop.contactNumber">
+                  <ion-icon name="call-outline"></ion-icon>
+                  {{ shop.contactNumber }}
+                </p>
+
+                <p
+                  class="shop-email"
+                  *ngIf="shop.email">
+                  {{ shop.email }}
+                </p>
+
+                <!-- Services -->
+                <div
+                  class="shop-services"
+                  *ngIf="shop.services.length > 0">
+
+                  <p>Available Services:</p>
+
+                  <ion-badge
+                    color="medium"
+                    *ngFor="let service of shop.services">
+                    {{ service }}
+                  </ion-badge>
+
+                </div>
+
+                <!-- No Location -->
+                <p
+                  class="no-location"
+                  *ngIf="!shop.location">
+
+                  <ion-icon name="information-circle-outline"></ion-icon>
+                  Map location not yet available.
+
+                </p>
+
+                <!-- View Details -->
+                <ion-button
+                  expand="block"
+                  fill="outline"
+                  (click)="viewDetails(shop)">
+
+                  View Details
+
+                </ion-button>
+
+              </div>
+
+            </ion-card-content>
+
+          </ion-card>
+
+        </div>
+
+      </section>
+
+    </ng-container>
+
+  </div>
+
+</ion-content>

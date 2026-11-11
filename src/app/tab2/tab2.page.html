@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Repair Shops</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h2>Find a Repair Shop</h2>
+
+  <p class="subtitle">
+    Search for shops by name, location, or service.
+  </p>
+
+<ion-searchbar
+[(ngModel)]="searchText"
+placeholder="Search repair shops"
+animated="true"> </ion-searchbar>
+
+  <div class="results">
+    {{ filteredShops.length }} shops found
+  </div>
+
+<ion-card *ngFor="let shop of filteredShops"> <ion-card-header> <ion-card-title>{{ shop.name }}</ion-card-title> </ion-card-header>
+
+```
+<ion-card-content>
+  <p>
+    <ion-icon name="location-outline"></ion-icon>
+    {{ shop.location }}
+  </p>
+
+  <p>
+    <ion-icon name="star"></ion-icon>
+    {{ shop.rating }} / 5
+  </p>
+
+  <p>
+    <ion-icon name="call-outline"></ion-icon>
+    {{ shop.phone }}
+  </p>
+
+  <div class="service-list">
+    <ion-badge
+      color="light"
+      *ngFor="let service of shop.services">
+      {{ service }}
+    </ion-badge>
+  </div>
+
+  <div class="actions">
+    <ion-button
+      size="small"
+      fill="outline"
+      (click)="openLocation(shop)">
+      View Location
+    </ion-button>
+
+    <ion-button
+      size="small"
+      (click)="callShop(shop.phone)">
+      Contact
+    </ion-button>
+  </div>
+</ion-card-content>
+```
+
+  </ion-card>
+
+  <p *ngIf="filteredShops.length === 0" class="empty">
+    No repair shops found. Try another search.
+  </p>
+</ion-content>

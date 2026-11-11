@@ -1,0 +1,695 @@
+
+:host {
+  --gs-green: #16a34a;
+  --gs-green-dark: #15803d;
+  --gs-dark: #14231b;
+  --gs-text: #1f2937;
+  --gs-muted: #64748b;
+  --gs-border: #e2e8f0;
+  --gs-bg: #f5f8f6;
+}
+
+.shop-details-content {
+  --background: var(--gs-bg);
+}
+
+.page-container {
+  width: min(100% - 32px, 1050px);
+  margin: 0 auto;
+  padding: 28px 0 60px;
+}
+
+/* LOADING AND ERROR STATES */
+
+.state-container {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 14px;
+  color: var(--gs-muted);
+}
+
+.state-container ion-spinner {
+  width: 38px;
+  height: 38px;
+  color: var(--gs-green);
+}
+
+.state-container > ion-icon {
+  font-size: 48px;
+  color: #dc2626;
+}
+
+.state-container h2 {
+  margin: 0;
+  color: var(--gs-dark);
+}
+
+.state-container p {
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+/* SHOP PROFILE */
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 30px;
+  margin-bottom: 22px;
+  background: linear-gradient(135deg, #14231b, #234b35);
+  border-radius: 18px;
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(20, 35, 27, 0.12);
+}
+
+.profile-icon {
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 18px;
+}
+
+.profile-icon ion-icon {
+  font-size: 38px;
+  color: #a3e635;
+}
+
+.profile-info {
+  min-width: 0;
+}
+
+.profile-info h1 {
+  margin: 0 0 7px;
+  font-size: 28px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.owner-name {
+  margin: 0 0 12px;
+  color: #d1fae5;
+}
+
+.shop-category {
+  display: inline-block;
+  padding: 6px 12px;
+  color: #ecfccb;
+  background: rgba(163, 230, 53, 0.15);
+  border: 1px solid rgba(190, 242, 100, 0.3);
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* RATING SUMMARY */
+
+.rating-summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.rating-stars ion-icon {
+  color: #facc15;
+  font-size: 17px;
+}
+
+.average-rating {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.review-count {
+  color: #d1fae5;
+  font-size: 12px;
+}
+
+.no-rating-summary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 15px;
+  color: #d1fae5;
+  font-size: 12px;
+}
+
+.no-rating-summary ion-icon {
+  color: #facc15;
+  font-size: 17px;
+}
+
+/* GENERAL CARDS */
+
+.details-card,
+.request-card {
+  padding: 26px;
+  margin-bottom: 22px;
+  background: #fff;
+  border: 1px solid var(--gs-border);
+  border-radius: 16px;
+  box-shadow: 0 5px 18px rgba(15, 23, 42, 0.035);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 20px;
+}
+
+.section-heading > ion-icon {
+  flex-shrink: 0;
+  color: var(--gs-green);
+  font-size: 23px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  color: var(--gs-dark);
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.section-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 27px;
+  height: 27px;
+  padding: 0 8px;
+  margin-left: auto;
+  color: var(--gs-green-dark);
+  background: #f0fdf4;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.section-heading p {
+  margin: 9px 0 0;
+  color: var(--gs-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* SHOP INFORMATION */
+
+.shop-description {
+  color: var(--gs-muted);
+  font-size: 14px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.contact-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.contact-item > ion-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--gs-green);
+  font-size: 21px;
+}
+
+.contact-item div {
+  min-width: 0;
+}
+
+.contact-item span {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--gs-muted);
+  font-size: 12px;
+}
+
+.contact-item p {
+  margin: 0;
+  color: var(--gs-text);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* CUSTOMER REVIEWS */
+
+.reviews-card {
+  overflow: hidden;
+}
+
+.reviews-state {
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  color: var(--gs-muted);
+  text-align: center;
+}
+
+.reviews-state ion-spinner {
+  width: 30px;
+  height: 30px;
+  color: var(--gs-green);
+}
+
+.reviews-state > ion-icon {
+  font-size: 34px;
+}
+
+.reviews-state p {
+  max-width: 400px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.empty-reviews > ion-icon {
+  color: #94a3b8;
+  font-size: 40px;
+}
+
+.empty-reviews h3 {
+  margin: 0;
+  color: var(--gs-dark);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.empty-reviews p {
+  color: var(--gs-muted);
+}
+
+.reviews-error {
+  color: #991b1b;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+}
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.review-item {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--gs-border);
+}
+
+.review-item:first-child {
+  padding-top: 0;
+}
+
+.review-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.review-customer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.customer-avatar {
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  color: var(--gs-green-dark);
+  background: #f0fdf4;
+  border: 1px solid #dcfce7;
+  border-radius: 50%;
+}
+
+.customer-avatar ion-icon {
+  font-size: 21px;
+}
+
+.customer-info {
+  min-width: 0;
+}
+
+.customer-info h3 {
+  margin: 0 0 5px;
+  color: var(--gs-dark);
+  font-size: 14px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.review-date {
+  color: var(--gs-muted);
+  font-size: 11px;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.review-rating ion-icon {
+  color: #f59e0b;
+  font-size: 15px;
+}
+
+.review-text {
+  margin: 15px 0 0 55px;
+  color: var(--gs-text);
+  font-size: 13px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.review-no-comment {
+  margin: 12px 0 0 55px;
+  color: var(--gs-muted);
+  font-size: 12px;
+  font-style: italic;
+}
+
+/* AVAILABLE SERVICES */
+
+.available-services {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.service-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 12px 14px;
+  color: var(--gs-text);
+  background: #f8faf9;
+  border: 1px solid var(--gs-border);
+  border-radius: 10px;
+}
+
+.service-item > ion-icon {
+  flex-shrink: 0;
+  color: var(--gs-green);
+  font-size: 19px;
+}
+
+.service-item span {
+  font-size: 13px;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.empty-services {
+  padding: 18px;
+  color: var(--gs-muted);
+  background: #f8faf9;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.empty-services p {
+  margin: 0;
+}
+
+/* REPAIR REQUEST FORM */
+
+.request-description {
+  margin: -7px 0 22px;
+  color: var(--gs-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.request-card form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.form-group label {
+  color: var(--gs-text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 13px;
+  color: var(--gs-text);
+  background: #fff;
+  border: 1px solid #dbe3dd;
+  border-radius: 9px;
+  outline: none;
+  font: inherit;
+  font-size: 13px;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group textarea {
+  min-height: 125px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--gs-green);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+.form-group:has(textarea) {
+  grid-column: 1 / -1;
+}
+
+/* APPOINTMENT SCHEDULING */
+
+.form-group input[type="date"],
+.form-group input[type="time"] {
+  cursor: pointer;
+  color-scheme: light;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator,
+.form-group input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.75;
+}
+
+.appointment-note {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 14px 15px;
+  color: #166534;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+}
+
+.appointment-note ion-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--gs-green-dark);
+  font-size: 19px;
+}
+
+.appointment-note p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* FORM MESSAGES */
+
+.form-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 14px;
+  margin-bottom: 18px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.form-message > ion-icon {
+  flex-shrink: 0;
+  font-size: 21px;
+}
+
+.form-message span {
+  line-height: 1.6;
+}
+
+.success-message {
+  color: #166534;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.error-message {
+  color: #991b1b;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.request-card form ion-button {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  --background: var(--gs-green);
+  --background-hover: var(--gs-green-dark);
+  --border-radius: 9px;
+  height: 48px;
+  font-weight: 700;
+}
+
+.request-note {
+  margin: 17px 0 0;
+  color: var(--gs-muted);
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* MY REQUESTS ACTION */
+
+.my-requests-action {
+  margin-top: 4px;
+}
+
+.my-requests-action ion-button {
+  --border-radius: 9px;
+  height: 46px;
+  font-weight: 700;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 650px) {
+  .page-container {
+    width: min(100% - 22px, 1050px);
+    padding-top: 16px;
+  }
+
+  .profile-card {
+    align-items: flex-start;
+    gap: 15px;
+    padding: 21px;
+  }
+
+  .profile-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+  }
+
+  .profile-icon ion-icon {
+    font-size: 29px;
+  }
+
+  .profile-info h1 {
+    font-size: 21px;
+  }
+
+  .details-card,
+  .request-card {
+    padding: 19px;
+  }
+
+  .contact-list,
+  .available-services,
+  .request-card form {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group:has(textarea),
+  .appointment-note,
+  .request-card form ion-button {
+    grid-column: auto;
+  }
+
+  .review-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .review-rating {
+    margin-left: 55px;
+  }
+
+  .review-text,
+  .review-no-comment {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .profile-card {
+    flex-direction: column;
+  }
+
+  .section-heading h2 {
+    font-size: 19px;
+  }
+
+  .rating-summary {
+    gap: 6px;
+  }
+}

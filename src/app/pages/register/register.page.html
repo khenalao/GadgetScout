@@ -1,0 +1,297 @@
+<ion-content [fullscreen]="true" class="register-page">
+
+  <div class="page-layout">
+
+    <!-- LEFT BRAND PANEL -->
+    <section class="brand-panel">
+
+      <div class="brand-logo">
+        <div class="brand-icon">
+          <ion-icon name="construct-outline"></ion-icon>
+        </div>
+
+        <span>Gadget<span class="brand-highlight">Scout</span></span>
+      </div>
+
+      <div class="brand-content">
+
+        <div class="eyebrow">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+          <span>TRUSTED GADGET CARE</span>
+        </div>
+
+        <h1>
+          Your repairs,<br>
+          <span>always within reach.</span>
+        </h1>
+
+        <p class="brand-description">
+          Find reliable technicians, send repair requests, and follow every
+          update from one simple account.
+        </p>
+
+        <div class="feature-list">
+
+          <div class="feature-item">
+            <ion-icon name="search-outline"></ion-icon>
+            <span>Discover verified repair shops</span>
+          </div>
+
+          <div class="feature-item">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <span>Track every repair request</span>
+          </div>
+
+          <div class="feature-item">
+            <ion-icon name="notifications-outline"></ion-icon>
+            <span>Get timely status updates</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="brand-bottom">
+        Trusted by gadget owners looking for reliable repairs.
+      </div>
+
+      <div class="decorative-circle circle-one"></div>
+      <div class="decorative-circle circle-two"></div>
+
+    </section>
+
+    <!-- RIGHT REGISTER PANEL -->
+    <section class="form-panel">
+
+      <button
+        type="button"
+        class="back-home"
+        (click)="goToHome()">
+
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        Back to home
+
+      </button>
+
+      <div class="register-card">
+
+        <div class="card-heading">
+
+          <span class="welcome-label">GET STARTED</span>
+
+          <h2>Create your account</h2>
+
+          <p>
+            Create an account to request and manage gadget repairs.
+          </p>
+
+        </div>
+
+        <form (ngSubmit)="register()">
+
+          <!-- ACCOUNT TYPE -->
+          <div class="account-type">
+
+            <button
+              type="button"
+              class="account-option"
+              [class.selected]="role === 'customer'"
+              (click)="selectRole('customer')">
+
+              <ion-icon name="person-outline"></ion-icon>
+
+              <span class="account-option-text">
+                <strong>Customer</strong>
+                <small>I need a repair</small>
+              </span>
+
+            </button>
+
+            <button
+              type="button"
+              class="account-option"
+              [class.selected]="role === 'shopOwner'"
+              (click)="selectRole('shopOwner')">
+
+              <ion-icon name="storefront-outline"></ion-icon>
+
+              <span class="account-option-text">
+                <strong>Shop owner</strong>
+                <small>I offer repairs</small>
+              </span>
+
+            </button>
+
+          </div>
+
+          <!-- FULL NAME -->
+          <div class="form-field">
+
+            <label for="fullName">Full name</label>
+
+            <div class="input-wrapper">
+
+              <ion-icon name="person-outline"></ion-icon>
+
+              <input
+                id="fullName"
+                type="text"
+                name="fullName"
+                [(ngModel)]="fullName"
+                placeholder="Enter your full name"
+                autocomplete="name"
+                required>
+
+            </div>
+
+          </div>
+
+          <!-- EMAIL -->
+          <div class="form-field">
+
+            <label for="registerEmail">Email address</label>
+
+            <div class="input-wrapper">
+
+              <ion-icon name="mail-outline"></ion-icon>
+
+              <input
+                id="registerEmail"
+                type="email"
+                name="email"
+                [(ngModel)]="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required>
+
+            </div>
+
+          </div>
+
+          <!-- PASSWORD -->
+          <div class="form-field">
+
+            <label for="registerPassword">Password</label>
+
+            <div class="input-wrapper">
+
+              <ion-icon name="shield-checkmark-outline"></ion-icon>
+
+              <input
+                id="registerPassword"
+                type="password"
+                name="password"
+                [(ngModel)]="password"
+                placeholder="At least 8 characters"
+                autocomplete="new-password"
+                minlength="8"
+                required>
+
+            </div>
+
+          </div>
+
+          <!-- CONFIRM PASSWORD -->
+          <div class="form-field">
+
+            <label for="confirmPassword">Confirm password</label>
+
+            <div class="input-wrapper">
+
+              <ion-icon name="shield-checkmark-outline"></ion-icon>
+
+              <input
+                id="confirmPassword"
+                type="password"
+                name="confirmPassword"
+                [(ngModel)]="confirmPassword"
+                placeholder="Enter your password again"
+                autocomplete="new-password"
+                minlength="8"
+                required>
+
+            </div>
+
+          </div>
+
+          <!-- SHOP OWNER NOTICE -->
+          <div
+            class="approval-notice"
+            *ngIf="role === 'shopOwner'">
+
+            <ion-icon name="information-circle-outline"></ion-icon>
+
+            <span>
+              Shop owner accounts require administrator approval before
+              accessing the shop dashboard.
+            </span>
+
+          </div>
+
+          <!-- TERMS -->
+          <label class="terms-option">
+
+            <input
+              type="checkbox"
+              name="acceptedTerms"
+              [(ngModel)]="acceptedTerms"
+              required>
+
+            <span>
+              I agree to the
+              <button
+                type="button"
+                class="terms-link"
+                (click)="showTerms()">
+                Terms of Service
+              </button>
+              and
+              <button
+                type="button"
+                class="terms-link"
+                (click)="showPrivacy()">
+                Privacy Policy
+              </button>.
+            </span>
+
+          </label>
+
+          <!-- CREATE ACCOUNT -->
+          <button
+            type="submit"
+            class="register-button"
+            [disabled]="loading">
+
+            <span>
+              {{ loading ? 'Creating account...' : 'Create my account' }}
+            </span>
+
+            <ion-icon
+              *ngIf="!loading"
+              name="arrow-forward-outline">
+            </ion-icon>
+
+          </button>
+
+        </form>
+
+        <!-- LOGIN LINK -->
+        <div class="login-footer">
+
+          <span>Already have a GadgetScout account?</span>
+
+          <button
+            type="button"
+            (click)="goToLogin()">
+            Log in
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</ion-content>

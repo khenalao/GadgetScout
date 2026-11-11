@@ -1,0 +1,154 @@
+.waiting-content {
+  --background: #f4f6fa;
+}
+
+.waiting-container {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+.waiting-card {
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px 30px 24px;
+  text-align: center;
+  box-shadow: 0 8px 35px rgba(15, 23, 42, 0.07);
+}
+
+.brand-icon {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 12px;
+  border-radius: 18px;
+  background: #eaf2ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ion-icon {
+    font-size: 34px;
+  }
+}
+
+.brand-name {
+  color: #172554;
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 32px;
+}
+
+.status-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  ion-spinner {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 20px;
+    color: #2563eb;
+  }
+
+  h1 {
+    color: #172554;
+    font-size: 25px;
+    font-weight: 800;
+    line-height: 1.3;
+    margin: 16px 0 12px;
+  }
+
+  p {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 8px 0;
+  }
+}
+
+.status-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ion-icon {
+    font-size: 42px;
+  }
+}
+
+.pending-icon {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.rejected-icon {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.status-label {
+  margin-top: 20px;
+  color: #c2410c;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.rejected-label {
+  color: #dc2626;
+}
+
+.shop-name {
+  color: #172554 !important;
+  font-size: 17px !important;
+  font-weight: 700;
+}
+
+.refresh-button {
+  width: 100%;
+  margin-top: 22px;
+  --background: #2563eb;
+  --background-hover: #1d4ed8;
+  --border-radius: 10px;
+  --box-shadow: none;
+  height: 48px;
+  font-weight: 700;
+}
+
+.error-message {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 14px;
+  line-height: 1.6;
+
+  ion-button {
+    margin-top: 12px;
+  }
+}
+
+.footer-text {
+  margin-top: 35px;
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+@media (max-width: 480px) {
+  .waiting-card {
+    padding: 32px 22px 22px;
+  }
+
+  .status-content h1 {
+    font-size: 22px;
+  }
+}

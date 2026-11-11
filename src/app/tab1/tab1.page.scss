@@ -1,0 +1,46 @@
+
+.hero {
+  text-align: center;
+  padding: 28px 12px 16px;
+}
+
+.hero-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 22px;
+  background: #e8efff;
+  color: #2457c5;
+  font-size: 38px;
+}
+
+.hero h1 {
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.hero p {
+  color: var(--ion-color-medium);
+  line-height: 1.6;
+}
+
+h2 {
+  font-size: 19px;
+  font-weight: 700;
+  margin-top: 24px;
+}
+
+ion-card {
+  margin: 14px 0;
+  border-radius: 16px;
+}
+
+ion-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+}

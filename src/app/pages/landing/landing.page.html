@@ -1,0 +1,687 @@
+<ion-content [fullscreen]="true" class="landing-page">
+
+  <div class="landing-wrapper">
+
+    <!-- NAVIGATION BAR -->
+    <header class="navbar">
+
+      <div class="navbar-container">
+
+        <button
+          type="button"
+          class="brand-logo"
+          (click)="scrollToSection('top')">
+
+          <span class="brand-icon">
+            <ion-icon name="construct-outline"></ion-icon>
+          </span>
+
+          <span class="brand-name">
+            Gadget<span>Scout</span>
+          </span>
+
+        </button>
+
+        <!-- DESKTOP NAVIGATION -->
+        <nav class="desktop-nav">
+
+          <button
+            type="button"
+            (click)="scrollToSection('top')">
+            Home
+          </button>
+
+          <button
+            type="button"
+            (click)="scrollToSection('features')">
+            Features
+          </button>
+
+          <button
+            type="button"
+            (click)="scrollToSection('about')">
+            About
+          </button>
+
+        </nav>
+
+        <div class="navbar-actions">
+
+          <button
+            type="button"
+            class="nav-login"
+            (click)="goToLogin()">
+            Log in
+          </button>
+
+          <button
+            type="button"
+            class="nav-get-started"
+            (click)="getStarted()">
+
+            Get Started
+
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+
+          </button>
+
+        </div>
+
+        <!-- MOBILE MENU BUTTON -->
+        <button
+          type="button"
+          class="mobile-menu-button"
+          aria-label="Toggle navigation menu"
+          (click)="toggleMobileMenu()">
+
+          <span></span>
+          <span></span>
+          <span></span>
+
+        </button>
+
+      </div>
+
+      <!-- MOBILE NAVIGATION -->
+      <nav
+        class="mobile-nav"
+        [class.open]="mobileMenuOpen">
+
+        <button
+          type="button"
+          (click)="scrollToSection('top')">
+          Home
+        </button>
+
+        <button
+          type="button"
+          (click)="scrollToSection('features')">
+          Features
+        </button>
+
+        <button
+          type="button"
+          (click)="scrollToSection('about')">
+          About
+        </button>
+
+        <button
+          type="button"
+          class="mobile-login"
+          (click)="goToLogin()">
+          Log in
+        </button>
+
+        <button
+          type="button"
+          class="mobile-get-started"
+          (click)="getStarted()">
+          Get Started
+          <ion-icon name="arrow-forward-outline"></ion-icon>
+        </button>
+
+      </nav>
+
+    </header>
+
+
+    <!-- HERO SECTION -->
+    <main id="top">
+
+      <section class="hero-section">
+
+        <div class="hero-container">
+
+          <!-- HERO CONTENT -->
+          <div class="hero-content">
+
+            <div class="hero-eyebrow">
+              <span class="eyebrow-icon">
+                <ion-icon name="shield-checkmark-outline"></ion-icon>
+              </span>
+
+              <span>YOUR TRUSTED GADGET CARE PARTNER</span>
+            </div>
+
+            <h1>
+              Find Your Trusted
+              <span>Gadget Repair Shop.</span>
+            </h1>
+
+            <p class="hero-description">
+              Your gadgets deserve reliable care. Discover repair shops,
+              explore services, and manage your repair requests with
+              GadgetScout — all in one place.
+            </p>
+
+            <div class="hero-actions">
+
+              <button
+                type="button"
+                class="primary-button"
+                (click)="getStarted()">
+
+                Get Started
+
+                <ion-icon name="arrow-forward-outline"></ion-icon>
+
+              </button>
+
+              <button
+                type="button"
+                class="secondary-button"
+                (click)="scrollToSection('features')">
+
+                Explore Features
+
+              </button>
+
+            </div>
+
+            <div class="hero-trust">
+
+              <div class="trust-icon">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+              </div>
+
+              <span>
+                A simpler way to find gadget repair services
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- HERO VISUAL -->
+          <div class="hero-visual">
+
+            <div class="visual-glow"></div>
+
+            <div class="floating-label label-top">
+              <span class="floating-icon">
+                <ion-icon name="shield-checkmark-outline"></ion-icon>
+              </span>
+
+              <span>
+                <strong>Trusted Care</strong>
+                <small>Find repair shops</small>
+              </span>
+            </div>
+
+            <div class="main-visual-card">
+
+              <div class="visual-card-header">
+
+                <div>
+                  <span class="visual-overline">
+                    GADGETSCOUT
+                  </span>
+
+                  <h3>Find a repair shop</h3>
+                </div>
+
+                <span class="visual-search-icon">
+                  <ion-icon name="search-outline"></ion-icon>
+                </span>
+
+              </div>
+
+              <div class="visual-search-bar">
+                <ion-icon name="search-outline"></ion-icon>
+                <span>Search repair shops or services</span>
+              </div>
+
+              <div class="visual-category-heading">
+                Popular Categories
+              </div>
+
+              <div class="visual-categories">
+
+                <div class="visual-category">
+                  <span class="category-icon phone">
+                    <ion-icon name="phone-portrait-outline"></ion-icon>
+                  </span>
+                  <span>Smartphones</span>
+                </div>
+
+                <div class="visual-category">
+                  <span class="category-icon laptop">
+                    <ion-icon name="laptop-outline"></ion-icon>
+                  </span>
+                  <span>Laptops</span>
+                </div>
+
+                <div class="visual-category">
+                  <span class="category-icon tablet">
+                    <ion-icon name="tablet-portrait-outline"></ion-icon>
+                  </span>
+                  <span>Tablets</span>
+                </div>
+
+              </div>
+
+              <div class="visual-shop-card">
+
+                <div class="shop-avatar">
+                  <ion-icon name="storefront-outline"></ion-icon>
+                </div>
+
+                <div class="shop-information">
+                  <strong>Repair Shop</strong>
+                  <span>Gadget repair services</span>
+
+                  <div class="shop-rating">
+                    <ion-icon name="star-outline"></ion-icon>
+                    <span>Customer Reviews</span>
+                  </div>
+                </div>
+
+                <ion-icon
+                  name="checkmark-circle-outline"
+                  class="shop-verified">
+                </ion-icon>
+
+              </div>
+
+              <div class="visual-bottom-note">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                <span>Your gadget care starts here.</span>
+              </div>
+
+            </div>
+
+            <div class="floating-label label-bottom">
+              <span class="floating-icon">
+                <ion-icon name="document-text-outline"></ion-icon>
+              </span>
+
+              <span>
+                <strong>Easy Tracking</strong>
+                <small>Manage repair requests</small>
+              </span>
+            </div>
+
+            <div class="visual-decoration decoration-one"></div>
+            <div class="visual-decoration decoration-two"></div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- TRUST STRIP -->
+      <section class="trust-strip">
+
+        <div class="trust-strip-container">
+
+          <div class="trust-item">
+            <ion-icon name="search-outline"></ion-icon>
+            <span>Discover Repair Shops</span>
+          </div>
+
+          <div class="trust-divider"></div>
+
+          <div class="trust-item">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <span>Manage Repair Requests</span>
+          </div>
+
+          <div class="trust-divider"></div>
+
+          <div class="trust-item">
+            <ion-icon name="shield-checkmark-outline"></ion-icon>
+            <span>Convenient Gadget Care</span>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- FEATURES SECTION -->
+      <section id="features" class="features-section">
+
+        <div class="section-container">
+
+          <div class="section-heading">
+
+            <span class="section-eyebrow">
+              WHAT YOU CAN DO
+            </span>
+
+            <h2>
+              Everything you need for
+              <span>better gadget care.</span>
+            </h2>
+
+            <p>
+              GadgetScout makes it easier to discover repair services
+              and keep track of your gadget repair experience.
+            </p>
+
+          </div>
+
+
+          <div class="features-grid">
+
+            <article class="feature-card">
+
+              <div class="feature-icon feature-green">
+                <ion-icon name="search-outline"></ion-icon>
+              </div>
+
+              <h3>Find Repair Shops</h3>
+
+              <p>
+                Discover gadget repair shops and explore the services
+                they offer in one convenient platform.
+              </p>
+
+            </article>
+
+
+            <article class="feature-card">
+
+              <div class="feature-icon feature-lime">
+                <ion-icon name="calendar-outline"></ion-icon>
+              </div>
+
+              <h3>Request Appointments</h3>
+
+              <p>
+                Submit repair requests and choose your preferred
+                appointment date and time.
+              </p>
+
+            </article>
+
+
+            <article class="feature-card">
+
+              <div class="feature-icon feature-blue">
+                <ion-icon name="document-text-outline"></ion-icon>
+              </div>
+
+              <h3>Track Repair Requests</h3>
+
+              <p>
+                View your repair request details and follow status
+                updates from your selected repair shop.
+              </p>
+
+            </article>
+
+
+            <article class="feature-card">
+
+              <div class="feature-icon feature-purple">
+                <ion-icon name="star-outline"></ion-icon>
+              </div>
+
+              <h3>Share Your Experience</h3>
+
+              <p>
+                Leave ratings and reviews after completed repairs
+                to help other customers.
+              </p>
+
+            </article>
+
+
+            <article class="feature-card">
+
+              <div class="feature-icon feature-orange">
+                <ion-icon name="storefront-outline"></ion-icon>
+              </div>
+
+              <h3>For Repair Shop Owners</h3>
+
+              <p>
+                Manage your shop profile, services, customer requests,
+                and subscription information.
+              </p>
+
+            </article>
+
+
+            <article class="feature-card">
+
+              <div class="feature-icon feature-teal">
+                <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+              </div>
+
+              <h3>Simple Experience</h3>
+
+              <p>
+                Access useful gadget repair information through
+                one organized platform.
+              </p>
+
+            </article>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ABOUT SECTION -->
+      <section id="about" class="about-section">
+
+        <div class="about-container">
+
+          <div class="about-visual">
+
+            <div class="about-icon-main">
+              <ion-icon name="construct-outline"></ion-icon>
+            </div>
+
+            <div class="about-small-icon about-icon-one">
+              <ion-icon name="phone-portrait-outline"></ion-icon>
+            </div>
+
+            <div class="about-small-icon about-icon-two">
+              <ion-icon name="laptop-outline"></ion-icon>
+            </div>
+
+            <div class="about-circle"></div>
+
+          </div>
+
+
+          <div class="about-content">
+
+            <span class="section-eyebrow">
+              ABOUT GADGETSCOUT
+            </span>
+
+            <h2>
+              Making gadget repair
+              <span>easier and more accessible.</span>
+            </h2>
+
+            <p>
+              GadgetScout is a platform designed to connect customers
+              with gadget repair shops. It helps users discover available
+              repair services, submit repair requests, and monitor their
+              repair experience.
+            </p>
+
+            <p>
+              Whether you need help with a smartphone, laptop, tablet,
+              or another device, GadgetScout gives you a convenient
+              place to start.
+            </p>
+
+            <div class="about-check-list">
+
+              <div>
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                <span>Convenient repair shop discovery</span>
+              </div>
+
+              <div>
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                <span>Organized repair request management</span>
+              </div>
+
+              <div>
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                <span>Customer ratings and reviews</span>
+              </div>
+
+            </div>
+
+            <button
+              type="button"
+              class="about-button"
+              (click)="getStarted()">
+
+              Explore GadgetScout
+              <ion-icon name="arrow-forward-outline"></ion-icon>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- CALL TO ACTION -->
+      <section class="cta-section">
+
+        <div class="cta-container">
+
+          <div class="cta-content">
+
+            <span class="cta-eyebrow">
+              START YOUR GADGET CARE JOURNEY
+            </span>
+
+            <h2>
+              Ready to find the right
+              <span>repair shop?</span>
+            </h2>
+
+            <p>
+              Get started with GadgetScout and discover a simpler
+              way to manage your gadget repair needs.
+            </p>
+
+            <button
+              type="button"
+              class="cta-button"
+              (click)="getStarted()">
+
+              Get Started Now
+
+              <ion-icon name="arrow-forward-outline"></ion-icon>
+
+            </button>
+
+          </div>
+
+          <div class="cta-decoration">
+            <ion-icon name="construct-outline"></ion-icon>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="landing-footer">
+
+      <div class="footer-container">
+
+        <div class="footer-brand">
+
+          <div class="footer-logo">
+            <span class="footer-brand-icon">
+              <ion-icon name="construct-outline"></ion-icon>
+            </span>
+
+            <span>
+              Gadget<span>Scout</span>
+            </span>
+          </div>
+
+          <p>
+            Your trusted platform for discovering gadget repair services.
+          </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+          <strong>Quick Links</strong>
+
+          <button
+            type="button"
+            (click)="scrollToSection('top')">
+            Home
+          </button>
+
+          <button
+            type="button"
+            (click)="scrollToSection('features')">
+            Features
+          </button>
+
+          <button
+            type="button"
+            (click)="scrollToSection('about')">
+            About
+          </button>
+
+          <button
+            type="button"
+            (click)="goToLogin()">
+            Log in
+          </button>
+
+        </div>
+
+
+        <div class="footer-action">
+
+          <strong>Get Started</strong>
+
+          <p>
+            Discover GadgetScout and explore gadget repair services.
+          </p>
+
+          <button
+            type="button"
+            (click)="getStarted()">
+
+            Create an account
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="footer-bottom">
+        <span>© {{ 2026 }} GadgetScout. All rights reserved.</span>
+        <span>Find. Connect. Repair.</span>
+      </div>
+
+    </footer>
+
+  </div>
+
+</ion-content>

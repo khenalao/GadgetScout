@@ -1,0 +1,446 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-button
+      slot="start"
+      fill="clear"
+      color="dark"
+      (click)="goBack()"
+    >
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+
+    <ion-title>Shop Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="shop-details-content">
+
+  <div class="page-container">
+
+    <!-- LOADING STATE -->
+    <div class="state-container" *ngIf="isLoading">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading shop details...</p>
+    </div>
+
+    <!-- SHOP NOT AVAILABLE -->
+    <div class="state-container error-state" *ngIf="!isLoading && !shop">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <h2>Shop Not Available</h2>
+      <p>This repair shop could not be found or is currently unavailable.</p>
+
+      <ion-button color="success" (click)="goBack()">
+        Go Back
+      </ion-button>
+    </div>
+
+    <!-- SHOP CONTENT -->
+    <ng-container *ngIf="!isLoading && shop">
+
+      <!-- SHOP PROFILE -->
+      <section class="profile-card">
+
+        <div class="profile-icon">
+          <ion-icon name="storefront-outline"></ion-icon>
+        </div>
+
+        <div class="profile-info">
+          <h1>{{ shop.shopName || 'Repair Shop' }}</h1>
+
+          <p class="owner-name">
+            {{ shop.ownerName || 'Shop Owner' }}
+          </p>
+
+          <span class="shop-category">
+            {{ shop.category || 'Repair Services' }}
+          </span>
+
+          <!-- RATING SUMMARY -->
+          <div class="rating-summary" *ngIf="totalReviews > 0">
+            <div class="rating-stars">
+              <ion-icon
+                *ngFor="let starValue of getReviewStars(averageRating)"
+                [name]="starValue ? 'star' : 'star-outline'"
+              ></ion-icon>
+            </div>
+
+            <span class="average-rating">
+              {{ averageRating | number:'1.1-1' }}
+            </span>
+
+            <span class="review-count">
+              ({{ totalReviews }} {{ totalReviews === 1 ? 'review' : 'reviews' }})
+            </span>
+          </div>
+
+          <div class="no-rating-summary" *ngIf="totalReviews === 0">
+            <ion-icon name="star-outline"></ion-icon>
+            <span>No ratings yet</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- SHOP INFORMATION -->
+      <section class="details-card">
+
+        <div class="section-heading">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <h2>Shop Information</h2>
+        </div>
+
+        <p class="shop-description">
+          {{ shop.description || 'No shop description available.' }}
+        </p>
+
+        <div class="contact-list">
+
+          <div class="contact-item">
+            <ion-icon name="location-outline"></ion-icon>
+            <div>
+              <span>Address</span>
+              <p>{{ shop.address || 'Not provided' }}</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <ion-icon name="call-outline"></ion-icon>
+            <div>
+              <span>Contact Number</span>
+              <p>{{ shop.contactNumber || 'Not provided' }}</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <ion-icon name="mail-outline"></ion-icon>
+            <div>
+              <span>Email Address</span>
+              <p>{{ shop.email || 'Not provided' }}</p>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- CUSTOMER REVIEWS -->
+      <section class="details-card reviews-card">
+
+        <div class="section-heading">
+          <ion-icon name="star-outline"></ion-icon>
+          <h2>Customer Reviews</h2>
+          <span class="section-count" *ngIf="totalReviews > 0">
+            {{ totalReviews }}
+          </span>
+        </div>
+
+        <!-- REVIEW LOADING -->
+        <div class="reviews-state" *ngIf="isReviewsLoading">
+          <ion-spinner name="crescent"></ion-spinner>
+          <p>Loading customer reviews...</p>
+        </div>
+
+        <!-- REVIEW ERROR -->
+        <div class="reviews-state reviews-error" *ngIf="!isReviewsLoading && reviewsError">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <p>{{ reviewsError }}</p>
+        </div>
+
+        <!-- NO REVIEWS -->
+        <div
+          class="reviews-state empty-reviews"
+          *ngIf="!isReviewsLoading && !reviewsError && reviews.length === 0"
+        >
+          <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+          <h3>No Reviews Yet</h3>
+          <p>Customer reviews will appear here after completed repair requests are rated.</p>
+        </div>
+
+        <!-- REVIEW LIST -->
+        <div
+          class="review-list"
+          *ngIf="!isReviewsLoading && !reviewsError && reviews.length > 0"
+        >
+
+          <article class="review-item" *ngFor="let review of reviews">
+
+            <div class="review-header">
+
+              <div class="review-customer">
+                <div class="customer-avatar">
+                  <ion-icon name="person-outline"></ion-icon>
+                </div>
+
+                <div class="customer-info">
+                  <h3>{{ review.customerName || 'Customer' }}</h3>
+
+                  <span class="review-date" *ngIf="review.createdAt">
+                    {{ getTimestampValue(review.createdAt) | date:'mediumDate' }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="review-rating">
+                <ion-icon
+                  *ngFor="let starValue of getReviewStars(review.rating)"
+                  [name]="starValue ? 'star' : 'star-outline'"
+                ></ion-icon>
+              </div>
+
+            </div>
+
+            <p class="review-text" *ngIf="review.review && review.review.trim()">
+              {{ review.review }}
+            </p>
+
+            <p class="review-no-comment" *ngIf="!review.review || !review.review.trim()">
+              No written comment provided.
+            </p>
+
+          </article>
+
+        </div>
+
+      </section>
+
+      <!-- AVAILABLE REPAIR SERVICES -->
+      <section class="details-card">
+
+        <div class="section-heading">
+          <ion-icon name="construct-outline"></ion-icon>
+          <h2>Available Repair Services</h2>
+        </div>
+
+        <div
+          class="available-services"
+          *ngIf="shop.services && shop.services.length > 0"
+        >
+          <div class="service-item" *ngFor="let service of shop.services">
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+            <span>{{ service }}</span>
+          </div>
+        </div>
+
+        <div
+          class="empty-services"
+          *ngIf="!shop.services || shop.services.length === 0"
+        >
+          <p>No repair services listed yet.</p>
+        </div>
+
+      </section>
+
+      <!-- REPAIR REQUEST FORM -->
+      <section class="request-card">
+
+        <div class="section-heading">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <h2>Request a Repair</h2>
+        </div>
+
+        <p class="request-description">
+          Fill out the form below to send a repair request to this shop.
+        </p>
+
+        <form (ngSubmit)="submitRepairRequest()">
+
+          <!-- CUSTOMER NAME -->
+          <div class="form-group">
+            <label for="customerName">Full Name</label>
+
+            <input
+              id="customerName"
+              type="text"
+              name="customerName"
+              [(ngModel)]="customerName"
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
+
+          <!-- CUSTOMER CONTACT -->
+          <div class="form-group">
+            <label for="customerContact">Contact Number</label>
+
+            <input
+              id="customerContact"
+              type="tel"
+              name="customerContact"
+              [(ngModel)]="customerContact"
+              placeholder="Enter your contact number"
+              required
+            />
+          </div>
+
+          <!-- SERVICE -->
+          <div class="form-group">
+            <label for="serviceName">Repair Service</label>
+
+            <select
+              id="serviceName"
+              name="serviceName"
+              [(ngModel)]="serviceName"
+              required
+            >
+              <option value="" disabled>Select a repair service</option>
+
+              <option
+                *ngFor="let service of shop.services || []"
+                [value]="service"
+              >
+                {{ service }}
+              </option>
+            </select>
+          </div>
+
+          <!-- APPOINTMENT DATE -->
+          <div class="form-group">
+            <label for="appointmentDate">Preferred Appointment Date</label>
+
+            <input
+              id="appointmentDate"
+              type="date"
+              name="appointmentDate"
+              [(ngModel)]="appointmentDate"
+              [min]="minAppointmentDate"
+              required
+            />
+          </div>
+
+          <!-- APPOINTMENT TIME -->
+          <div class="form-group">
+            <label for="appointmentTime">Preferred Appointment Time</label>
+
+            <input
+              id="appointmentTime"
+              type="time"
+              name="appointmentTime"
+              [(ngModel)]="appointmentTime"
+              required
+            />
+          </div>
+
+          <!-- APPOINTMENT NOTE -->
+          <div class="appointment-note">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <p>
+              Your selected date and time are requested preferences.
+              The appointment will only be confirmed after the shop owner
+              accepts your repair request.
+            </p>
+          </div>
+
+          <!-- GADGET TYPE -->
+          <div class="form-group">
+            <label for="gadgetType">Gadget Type</label>
+
+            <input
+              id="gadgetType"
+              type="text"
+              name="gadgetType"
+              [(ngModel)]="gadgetType"
+              placeholder="e.g. Smartphone, Laptop, Tablet"
+              required
+            />
+          </div>
+
+          <!-- BRAND -->
+          <div class="form-group">
+            <label for="gadgetBrand">Gadget Brand</label>
+
+            <input
+              id="gadgetBrand"
+              type="text"
+              name="gadgetBrand"
+              [(ngModel)]="gadgetBrand"
+              placeholder="e.g. Samsung, Apple, Acer"
+            />
+          </div>
+
+          <!-- MODEL -->
+          <div class="form-group">
+            <label for="gadgetModel">Gadget Model</label>
+
+            <input
+              id="gadgetModel"
+              type="text"
+              name="gadgetModel"
+              [(ngModel)]="gadgetModel"
+              placeholder="Enter gadget model"
+            />
+          </div>
+
+          <!-- ISSUE DESCRIPTION -->
+          <div class="form-group">
+            <label for="issueDescription">Issue Description</label>
+
+            <textarea
+              id="issueDescription"
+              name="issueDescription"
+              [(ngModel)]="issueDescription"
+              rows="5"
+              placeholder="Describe the problem with your gadget..."
+              required
+            ></textarea>
+          </div>
+
+          <!-- SUCCESS MESSAGE -->
+          <div class="form-message success-message" *ngIf="successMessage">
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+            <span>{{ successMessage }}</span>
+          </div>
+
+          <!-- ERROR MESSAGE -->
+          <div class="form-message error-message" *ngIf="errorMessage">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+
+          <!-- SUBMIT BUTTON -->
+          <ion-button
+            type="submit"
+            expand="block"
+            color="success"
+            [disabled]="isSubmitting"
+          >
+            <ion-spinner
+              *ngIf="isSubmitting"
+              name="crescent"
+            ></ion-spinner>
+
+            <ion-icon
+              *ngIf="!isSubmitting"
+              slot="start"
+              name="send-outline"
+            ></ion-icon>
+
+            {{ isSubmitting ? 'Submitting Request...' : 'Submit Repair Request' }}
+          </ion-button>
+
+          <p class="request-note">
+            Your repair request and preferred appointment schedule will be
+            sent to the shop for review. Wait for the shop owner's confirmation.
+          </p>
+
+        </form>
+
+      </section>
+
+      <!-- MY REQUESTS BUTTON -->
+      <div class="my-requests-action">
+        <ion-button
+          expand="block"
+          fill="outline"
+          color="success"
+          (click)="openMyRequests()"
+        >
+          View My Repair Requests
+        </ion-button>
+      </div>
+
+    </ng-container>
+
+  </div>
+
+</ion-content>

@@ -1,0 +1,129 @@
+<ion-content class="waiting-content">
+
+  <div class="waiting-container">
+
+    <div class="waiting-card">
+
+      <div class="brand-icon">
+        <ion-icon name="time-outline"></ion-icon>
+      </div>
+
+      <div class="brand-name">
+        GadgetScout
+      </div>
+
+      <div *ngIf="loading" class="status-content">
+
+        <ion-spinner name="crescent"></ion-spinner>
+
+        <h1>Checking Your Shop Profile</h1>
+
+        <p>
+          Please wait while we check your shop profile status.
+        </p>
+
+      </div>
+
+      <div
+        *ngIf="!loading && !profileRejected && !errorMessage"
+        class="status-content"
+      >
+
+        <div class="status-icon pending-icon">
+          <ion-icon name="time-outline"></ion-icon>
+        </div>
+
+        <div class="status-label">
+          PENDING APPROVAL
+        </div>
+
+        <h1>Waiting for Admin Approval</h1>
+
+        <p class="shop-name">
+          {{ shopName }}
+        </p>
+
+        <p>
+          Your shop profile has been submitted successfully.
+          Our administrator is currently reviewing your information.
+        </p>
+
+        <p>
+          You can stay logged in. This page will automatically
+          redirect you to your Shop Dashboard once your profile
+          has been approved.
+        </p>
+
+        <ion-button
+          expand="block"
+          class="refresh-button"
+          (click)="refreshStatus()"
+        >
+          <ion-icon
+            name="refresh-outline"
+            slot="start"
+          ></ion-icon>
+          Refresh Status
+        </ion-button>
+
+      </div>
+
+      <div
+        *ngIf="profileRejected"
+        class="status-content"
+      >
+
+        <div class="status-icon rejected-icon">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+        </div>
+
+        <div class="status-label rejected-label">
+          PROFILE REJECTED
+        </div>
+
+        <h1>Shop Profile Not Approved</h1>
+
+        <p>
+          Unfortunately, your shop profile was not approved.
+          Please contact the administrator for more information
+          about the review.
+        </p>
+
+        <ion-button
+          expand="block"
+          class="refresh-button"
+          (click)="logout()"
+        >
+          <ion-icon
+            name="log-out-outline"
+            slot="start"
+          ></ion-icon>
+          Back to Login
+        </ion-button>
+
+      </div>
+
+      <div
+        *ngIf="errorMessage"
+        class="error-message"
+      >
+        {{ errorMessage }}
+
+        <ion-button
+          expand="block"
+          fill="outline"
+          (click)="refreshStatus()"
+        >
+          Try Again
+        </ion-button>
+      </div>
+
+      <div class="footer-text">
+        © 2026 GadgetScout. All rights reserved.
+      </div>
+
+    </div>
+
+  </div>
+
+</ion-content>

@@ -1,0 +1,180 @@
+<ion-content [fullscreen]="true" class="login-page">
+
+  <div class="page-layout">
+
+    <!-- LEFT PANEL -->
+    <section class="brand-panel">
+
+      <div class="brand-logo">
+        <div class="brand-icon">
+          <ion-icon name="construct-outline"></ion-icon>
+        </div>
+        <span>Gadget<span class="brand-highlight">Scout</span></span>
+      </div>
+
+      <div class="brand-content">
+
+        <div class="eyebrow">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+          <span>TRUSTED GADGET CARE</span>
+        </div>
+
+        <h1>
+          Your repairs,<br>
+          <span>always within reach.</span>
+        </h1>
+
+        <p class="brand-description">
+          Find reliable technicians, send repair requests, and follow every
+          update from one simple account.
+        </p>
+
+        <div class="feature-list">
+
+          <div class="feature-item">
+            <ion-icon name="search-outline"></ion-icon>
+            <span>Discover verified repair shops</span>
+          </div>
+
+          <div class="feature-item">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <span>Track every repair request</span>
+          </div>
+
+          <div class="feature-item">
+            <ion-icon name="notifications-outline"></ion-icon>
+            <span>Get timely status updates</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="decorative-circle circle-one"></div>
+      <div class="decorative-circle circle-two"></div>
+
+    </section>
+
+    <!-- RIGHT PANEL -->
+    <section class="form-panel">
+
+      
+
+      <div class="login-card">
+
+        <div class="card-heading">
+          <span class="welcome-label">WELCOME BACK</span>
+
+          <h2>Log in to GadgetScout</h2>
+
+          <p>
+            Enter your details to access your repair dashboard.
+          </p>
+        </div>
+
+        <form (ngSubmit)="login()">
+
+          <!-- EMAIL -->
+          <div class="form-field">
+
+            <label for="email">Email address</label>
+
+            <div class="input-wrapper">
+              <ion-icon name="mail-outline"></ion-icon>
+
+              <input
+                id="email"
+                type="email"
+                name="email"
+                [(ngModel)]="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required>
+            </div>
+
+          </div>
+
+          <!-- PASSWORD -->
+          <div class="form-field">
+
+            <label for="password">Password</label>
+
+            <div class="input-wrapper">
+              <ion-icon name="shield-checkmark-outline"></ion-icon>
+
+              <input
+                id="password"
+                type="password"
+                name="password"
+                [(ngModel)]="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required>
+            </div>
+
+          </div>
+
+          <!-- REMEMBER ME / FORGOT PASSWORD -->
+          <div class="form-options">
+
+            <label class="remember-option">
+              <input type="checkbox" name="rememberMe">
+              <span>Remember me</span>
+            </label>
+
+            <button
+              type="button"
+              class="forgot-password"
+              (click)="forgotPassword()">
+              Forgot password?
+            </button>
+
+          </div>
+
+          <!-- LOGIN BUTTON -->
+          <button
+            type="submit"
+            class="login-button"
+            [disabled]="loading">
+
+            <span>{{ loading ? 'Logging in...' : 'Log in' }}</span>
+
+            <ion-icon
+              *ngIf="!loading"
+              name="arrow-forward-outline">
+            </ion-icon>
+
+          </button>
+
+        </form>
+
+        <!-- SHOP OWNER LOGIN -->
+        <button
+          type="button"
+          class="shop-owner-button"
+          (click)="focusEmail()">
+
+          <ion-icon name="storefront-outline"></ion-icon>
+
+          <span>Log in as a repair shop owner</span>
+
+        </button>
+
+        <!-- REGISTER -->
+        <div class="register-footer">
+          <span>New to GadgetScout?</span>
+
+          <button
+            type="button"
+            (click)="goToRegister()">
+            Create an account
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</ion-content>

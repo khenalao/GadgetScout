@@ -1,0 +1,431 @@
+
+<ion-content [fullscreen]="true" class="home-content">
+
+  <div
+    class="dashboard-shell"
+    [class.sidebar-collapsed]="isSidebarCollapsed"
+    [class.mobile-sidebar-open]="isMobileSidebarOpen"
+  >
+
+    <!-- MOBILE SIDEBAR OVERLAY -->
+    <div
+      class="sidebar-overlay"
+      *ngIf="isMobileSidebarOpen"
+      (click)="closeMobileSidebar()"
+    ></div>
+
+    <!-- CUSTOMER SIDEBAR -->
+    <aside class="customer-sidebar">
+
+      <div class="sidebar-header">
+
+        <div class="sidebar-brand-icon">
+          <ion-icon name="construct-outline"></ion-icon>
+        </div>
+
+        <div class="sidebar-brand-text">
+          <strong>GadgetScout</strong>
+          <span>Customer Panel</span>
+        </div>
+
+        <button
+          class="sidebar-close-button"
+          aria-label="Close sidebar"
+          (click)="closeMobileSidebar()"
+        >
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-section-label">
+        MAIN MENU
+      </div>
+
+      <nav class="sidebar-navigation">
+
+        <button
+          class="sidebar-link"
+          [class.active]="activeSection === 'home'"
+          (click)="selectSection('home')"
+          title="Home"
+        >
+          <ion-icon name="home-outline"></ion-icon>
+          <span>Home</span>
+        </button>
+
+        <button
+          class="sidebar-link"
+          [class.active]="activeSection === 'shops'"
+          (click)="selectSection('shops')"
+          title="Find Repair Shops"
+        >
+          <ion-icon name="storefront-outline"></ion-icon>
+          <span>Find Repair Shops</span>
+        </button>
+
+        <button
+          class="sidebar-link"
+          [class.active]="activeSection === 'requests'"
+          (click)="selectSection('requests')"
+          title="My Repair Requests"
+        >
+          <ion-icon name="clipboard-outline"></ion-icon>
+          <span>My Repair Requests</span>
+        </button>
+
+      </nav>
+
+      <div class="sidebar-bottom">
+
+        <div class="sidebar-divider"></div>
+
+        <button
+          class="sidebar-link logout-sidebar-link"
+          [disabled]="isLoggingOut"
+          (click)="logout()"
+          title="Logout"
+        >
+          <ion-icon name="log-out-outline"></ion-icon>
+          <span>{{ isLoggingOut ? 'Logging out...' : 'Logout' }}</span>
+        </button>
+
+        <div class="sidebar-footer">
+          <span>GadgetScout</span>
+          <small>Customer Portal © 2026</small>
+        </div>
+
+      </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+      <!-- CUSTOMER TOPBAR -->
+      <header class="dashboard-topbar">
+
+        <div class="topbar-left">
+
+          <ion-button
+            class="desktop-menu-button"
+            fill="clear"
+            aria-label="Toggle sidebar"
+            (click)="toggleSidebar()"
+          >
+            <ion-icon name="menu-outline"></ion-icon>
+          </ion-button>
+
+          <ion-button
+            class="mobile-menu-button"
+            fill="clear"
+            aria-label="Open sidebar"
+            (click)="toggleMobileSidebar()"
+          >
+            <ion-icon name="menu-outline"></ion-icon>
+          </ion-button>
+
+          <div class="topbar-heading">
+            <span class="topbar-eyebrow">GADGETSCOUT / CUSTOMER PANEL</span>
+            <h1>Customer Dashboard</h1>
+          </div>
+
+        </div>
+
+        <ion-button
+          class="topbar-logout"
+          fill="outline"
+          [disabled]="isLoggingOut"
+          (click)="logout()"
+        >
+          <ion-icon slot="start" name="log-out-outline"></ion-icon>
+          {{ isLoggingOut ? 'Logging out...' : 'Logout' }}
+        </ion-button>
+
+      </header>
+
+      <!-- PAGE CONTENT -->
+      <div class="dashboard-container">
+
+        <!-- HOME SECTION -->
+        <ng-container *ngIf="activeSection === 'home'">
+
+          <section class="welcome-banner">
+
+            <div class="welcome-text">
+
+              <span class="eyebrow">
+                <ion-icon name="shield-checkmark-outline"></ion-icon>
+                YOUR TRUSTED REPAIR PARTNER
+              </span>
+
+              <h2>Find the right repair shop for your gadgets.</h2>
+
+              <p>
+                Discover repair services for your smartphone, laptop,
+                tablet, and other devices in one place.
+              </p>
+
+              <ion-button
+                class="primary-button"
+                (click)="selectSection('shops')"
+              >
+                <ion-icon slot="start" name="search-outline"></ion-icon>
+                Find Repair Shops
+                <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+              </ion-button>
+
+            </div>
+
+            <div class="welcome-illustration" aria-hidden="true">
+
+              <div class="illustration-circle circle-one"></div>
+              <div class="illustration-circle circle-two"></div>
+
+              <div class="device-card phone-device">
+                <ion-icon name="phone-portrait-outline"></ion-icon>
+              </div>
+
+              <div class="device-card laptop-device">
+                <ion-icon name="laptop-outline"></ion-icon>
+              </div>
+
+              <div class="device-card repair-device">
+                <ion-icon name="construct-outline"></ion-icon>
+              </div>
+
+              <div class="illustration-caption">
+                <ion-icon name="shield-checkmark-outline"></ion-icon>
+                <span>Repair with confidence</span>
+              </div>
+
+            </div>
+
+          </section>
+
+        </ng-container>
+
+        <!-- FIND REPAIR SHOPS SECTION -->
+        <ng-container *ngIf="activeSection === 'shops'">
+
+          <section class="search-section">
+
+            <div class="section-heading">
+              <div>
+                <span class="section-label">START EXPLORING</span>
+                <h2>What needs fixing?</h2>
+                <p>Search by gadget type or service category.</p>
+              </div>
+            </div>
+
+            <div class="search-wrapper">
+
+              <ion-searchbar
+                [(ngModel)]="searchText"
+                placeholder="Search smartphones, laptops, tablets..."
+                aria-label="Search gadget repair categories"
+                [debounce]="150"
+                class="custom-search"
+              ></ion-searchbar>
+
+              <ion-button
+                class="search-button"
+                aria-label="Find repair shops"
+                (click)="findShops()"
+              >
+                <ion-icon name="search-outline"></ion-icon>
+              </ion-button>
+
+            </div>
+
+          </section>
+
+          <!-- CATEGORIES -->
+          <section class="categories-section">
+
+            <div class="section-heading heading-row">
+
+              <div>
+                <span class="section-label">BROWSE BY DEVICE</span>
+                <h2>Popular Categories</h2>
+                <p>Choose the type of gadget you need repaired.</p>
+              </div>
+
+              <ion-chip class="category-count">
+                {{ filteredCategories.length }} categories
+              </ion-chip>
+
+            </div>
+
+            <div class="category-grid">
+
+              <ion-card
+                class="category-card"
+                button="true"
+                *ngFor="let category of filteredCategories"
+                (click)="findShops(category)"
+              >
+                <ion-card-content>
+
+                  <div class="category-icon">
+                    <ion-icon [name]="category.icon"></ion-icon>
+                  </div>
+
+                  <h3>{{ category.name }}</h3>
+                  <p>{{ category.description }}</p>
+
+                  <div class="category-link">
+                    <span>Explore shops</span>
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
+                  </div>
+
+                </ion-card-content>
+              </ion-card>
+
+            </div>
+
+            <div
+              class="empty-search"
+              *ngIf="filteredCategories.length === 0"
+            >
+              <ion-icon name="search-outline"></ion-icon>
+              <h3>No categories found</h3>
+
+              <p>
+                Try searching for smartphones, laptops, tablets,
+                or other gadgets.
+              </p>
+
+              <ion-button fill="outline" (click)="searchText = ''">
+                Clear Search
+              </ion-button>
+            </div>
+
+          </section>
+
+          <!-- FEATURED SHOPS -->
+          <section class="featured-section">
+
+            <div class="section-heading heading-row">
+
+              <div>
+                <span class="section-label">FIND EXPERT HELP</span>
+                <h2>Repair Shops</h2>
+                <p>Explore shops and find a service that suits your needs.</p>
+              </div>
+
+              <ion-button
+                class="text-button"
+                fill="clear"
+                (click)="findShops()"
+              >
+                View All
+                <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+              </ion-button>
+
+            </div>
+
+            <div class="featured-card">
+
+              <div class="featured-icon">
+                <ion-icon name="storefront-outline"></ion-icon>
+              </div>
+
+              <div class="featured-copy">
+
+                <h3>Discover repair shops</h3>
+
+                <p>
+                  Browse available repair shops and check their services
+                  before deciding where to bring your gadget.
+                </p>
+
+                <div class="trust-note">
+                  <ion-icon name="shield-checkmark-outline"></ion-icon>
+                  <span>Look for approved shop profiles.</span>
+                </div>
+
+              </div>
+
+              <ion-button
+                class="outline-green-button"
+                fill="outline"
+                (click)="findShops()"
+              >
+                Browse Shops
+              </ion-button>
+
+            </div>
+
+          </section>
+
+        </ng-container>
+
+        <!-- MY REPAIR REQUESTS SECTION -->
+        <ng-container *ngIf="activeSection === 'requests'">
+
+          <section class="requests-section">
+
+            <div class="section-heading">
+              <span class="section-label">KEEP TRACK</span>
+              <h2>My Repair Requests</h2>
+              <p>
+                View your repair requests and check their status in one place.
+              </p>
+            </div>
+
+            <div class="request-card">
+
+              <div class="request-icon">
+                <ion-icon name="clipboard-outline"></ion-icon>
+              </div>
+
+              <div class="request-copy">
+
+                <span class="section-label">YOUR REPAIR ACTIVITY</span>
+
+                <h2>Track Your Repair Requests</h2>
+
+                <p>
+                  Check the details and status of your submitted repair
+                  requests.
+                </p>
+
+              </div>
+
+              <ion-button
+                class="primary-button request-button"
+                (click)="openRequests()"
+              >
+                View Requests
+                <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+              </ion-button>
+
+            </div>
+
+          </section>
+
+        </ng-container>
+
+        <!-- FOOTER -->
+        <footer class="home-footer">
+
+          <div class="footer-brand">
+            <ion-icon name="construct-outline"></ion-icon>
+            <strong>GadgetScout</strong>
+          </div>
+
+          <p>Helping you find trusted gadget repair services.</p>
+          <span>© 2026 GadgetScout</span>
+
+        </footer>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</ion-content>

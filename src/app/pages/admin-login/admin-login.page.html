@@ -1,0 +1,103 @@
+
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>
+      <span class="brand-name">GadgetScout</span>
+      <span class="admin-label">ADMIN</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="admin-login-content">
+
+  <div class="login-container">
+
+    <div class="login-heading">
+      <div class="admin-icon">
+        <ion-icon name="shield-checkmark-outline"></ion-icon>
+      </div>
+
+      <h1>Welcome Back</h1>
+      <p>Sign in to manage your GadgetScout platform.</p>
+    </div>
+
+    <form (ngSubmit)="loginAdmin()">
+
+      <div class="form-title">
+        <h2>Admin Login</h2>
+        <p>Enter your administrator credentials.</p>
+      </div>
+
+      <ion-item lines="none" class="input-item">
+        <ion-label position="stacked">Email Address</ion-label>
+        <ion-input
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="Enter admin email"
+          autocomplete="username"
+          required>
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none" class="input-item">
+        <ion-label position="stacked">Password</ion-label>
+        <ion-input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Enter password"
+          autocomplete="current-password"
+          required>
+        </ion-input>
+      </ion-item>
+
+      <div class="forgot-password">
+        <ion-button
+          type="button"
+          fill="clear"
+          size="small"
+          [disabled]="isResetting"
+          (click)="resetAdminPassword()">
+
+          <ion-spinner *ngIf="isResetting" name="crescent"></ion-spinner>
+
+          <span *ngIf="!isResetting">Forgot Password?</span>
+        </ion-button>
+      </div>
+
+      <ion-text color="success" *ngIf="resetMessage">
+        <p class="success-message">{{ resetMessage }}</p>
+      </ion-text>
+
+      <ion-text color="danger" *ngIf="errorMessage">
+        <p class="error-message">{{ errorMessage }}</p>
+      </ion-text>
+
+      <ion-button
+        type="submit"
+        expand="block"
+        class="signin-button"
+        [disabled]="isLoading || isResetting">
+
+        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+        <span *ngIf="!isLoading">Sign In</span>
+      </ion-button>
+
+    </form>
+
+    <div class="back-login">
+      <ion-button
+        expand="block"
+        fill="clear"
+        color="medium"
+        (click)="goToLogin()">
+        Back to User Login
+      </ion-button>
+    </div>
+
+    <p class="footer-text">GadgetScout Admin Portal</p>
+
+  </div>
+
+</ion-content>
