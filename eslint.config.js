@@ -1,3 +1,4 @@
+
 // @ts-check
 const tseslint = require("typescript-eslint");
 const angular = require("angular-eslint");
@@ -21,11 +22,16 @@ module.exports = tseslint.config(
         "error",
         { type: "attribute", prefix: "app", style: "camelCase" },
       ],
+
+      "@angular-eslint/prefer-inject": "off",
+      "@angular-eslint/no-empty-lifecycle-method": "off",
     },
   },
   {
     files: ["**/*.html"],
     extends: [...angular.configs.templateRecommended],
-    rules: {},
+    rules: {
+      "@angular-eslint/template/prefer-control-flow": "off",
+    },
   }
 );
