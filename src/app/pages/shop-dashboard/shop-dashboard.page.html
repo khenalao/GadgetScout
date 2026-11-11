@@ -1,5 +1,4 @@
-﻿
-<ion-content [fullscreen]="true" class="shop-content">
+﻿<ion-content [fullscreen]="true" class="shop-content">
 
   <div class="dashboard-layout" [class.sidebar-collapsed]="isSidebarCollapsed">
 
@@ -1198,7 +1197,7 @@
                   <span class="section-label">PREMIUM MEMBERSHIP</span>
                   <h2>Subscription & Payment</h2>
                   <p class="section-description">
-                    Submit your GCash transaction details to activate your GadgetScout shop subscription.
+                    Choose your preferred payment option for your GadgetScout shop subscription.
                   </p>
                 </div>
 
@@ -1229,6 +1228,85 @@
 
               </div>
 
+              <!-- DIRECT PAYMENT OPTIONS: COMING SOON -->
+              <div class="direct-payment-section">
+
+                <div class="direct-payment-heading">
+                  <div>
+                    <span class="section-label">MORE PAYMENT OPTIONS</span>
+                    <h3>Direct Payment Methods</h3>
+                    <p>
+                      Pay directly through your preferred digital wallet.
+                      These payment options are currently being prepared.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="direct-payment-grid">
+
+                  <!-- GCASH DIRECT PAYMENT -->
+                  <div class="direct-payment-card gcash-direct-card">
+
+                    <div class="direct-payment-card-top">
+                      <div class="direct-payment-icon gcash-direct-icon">
+                        <ion-icon name="phone-portrait-outline"></ion-icon>
+                      </div>
+
+                      <span class="coming-soon-badge">
+                        <ion-icon name="time-outline"></ion-icon>
+                        COMING SOON
+                      </span>
+                    </div>
+
+                    <div class="direct-payment-information">
+                      <h4>GCash Direct Payment</h4>
+                      <p>
+                        Pay your GadgetScout Premium subscription directly
+                        using your GCash wallet.
+                      </p>
+                    </div>
+
+                    <div class="direct-payment-footer">
+                      <ion-icon name="lock-closed-outline"></ion-icon>
+                      <span>Direct payment is not yet available.</span>
+                    </div>
+
+                  </div>
+
+                  <!-- MAYA DIRECT PAYMENT -->
+                  <div class="direct-payment-card maya-direct-card">
+
+                    <div class="direct-payment-card-top">
+                      <div class="direct-payment-icon maya-direct-icon">
+                        <ion-icon name="wallet-outline"></ion-icon>
+                      </div>
+
+                      <span class="coming-soon-badge">
+                        <ion-icon name="time-outline"></ion-icon>
+                        COMING SOON
+                      </span>
+                    </div>
+
+                    <div class="direct-payment-information">
+                      <h4>Maya Direct Payment</h4>
+                      <p>
+                        Pay your GadgetScout Premium subscription directly
+                        using your Maya wallet.
+                      </p>
+                    </div>
+
+                    <div class="direct-payment-footer">
+                      <ion-icon name="lock-closed-outline"></ion-icon>
+                      <span>Direct payment is not yet available.</span>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!-- EXISTING PAYMENT STATUS: PENDING -->
               <div class="payment-pending-notice" *ngIf="hasPendingPayment">
 
                 <div class="payment-notice-icon">
@@ -1256,6 +1334,7 @@
 
               </div>
 
+              <!-- EXISTING PAYMENT STATUS: APPROVED -->
               <div class="payment-success-message" *ngIf="latestPaymentStatus === 'approved'">
 
                 <ion-icon name="checkmark-circle-outline"></ion-icon>
@@ -1281,6 +1360,7 @@
 
               </div>
 
+              <!-- EXISTING PAYMENT STATUS: REJECTED -->
               <div class="payment-error-message" *ngIf="latestPaymentStatus === 'rejected'">
 
                 <ion-icon name="alert-circle-outline"></ion-icon>
@@ -1306,6 +1386,7 @@
 
               </div>
 
+              <!-- EXISTING GCASH MANUAL PAYMENT FORM -->
               <div class="payment-form-container" *ngIf="!hasPendingPayment">
 
                 <div class="payment-instructions">
@@ -1330,8 +1411,11 @@
                     </div>
 
                     <div>
-                      <h3>GCash Payment Details</h3>
-                      <p>Enter the exact information shown in your GCash transaction.</p>
+                      <h3>GCash Manual Payment</h3>
+                      <p>
+                        Use this existing manual payment process while direct
+                        GCash and Maya payments are being prepared.
+                      </p>
                     </div>
                   </div>
 

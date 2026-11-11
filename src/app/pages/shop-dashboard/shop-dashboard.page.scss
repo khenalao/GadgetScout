@@ -1,4 +1,5 @@
-﻿:host {
+﻿
+:host {
   display: block;
   --gs-dark: #103d30;
   --gs-dark-hover: #174c3c;
@@ -1452,6 +1453,140 @@
   font-size: 11px;
 }
 
+/* DIRECT PAYMENT OPTIONS */
+
+.direct-payment-section {
+  margin: 24px 0;
+}
+
+.direct-payment-heading {
+  margin-bottom: 15px;
+}
+
+.direct-payment-heading h3 {
+  margin: 0 0 6px;
+  color: var(--gs-dark);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.direct-payment-heading p {
+  margin: 0;
+  color: var(--gs-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.direct-payment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.direct-payment-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 19px;
+  border: 1px solid var(--gs-border);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 3px 12px rgba(16, 61, 48, 0.035);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.direct-payment-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 17px;
+}
+
+.direct-payment-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 47px;
+  height: 47px;
+  flex-shrink: 0;
+  border-radius: 12px;
+}
+
+.direct-payment-icon ion-icon {
+  font-size: 25px;
+}
+
+.gcash-direct-icon {
+  background: #eaf1fc;
+  color: #2766b1;
+}
+
+.maya-direct-icon {
+  background: #e8f7ef;
+  color: #168b50;
+}
+
+.gcash-direct-card {
+  border-color: #d9e6f5;
+}
+
+.maya-direct-card {
+  border-color: #d6eadf;
+}
+
+.coming-soon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 7px 10px;
+  border: 1px solid #f0dfb8;
+  border-radius: 20px;
+  background: #fff8e9;
+  color: #a66b13;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.direct-payment-information {
+  flex: 1;
+}
+
+.direct-payment-information h4 {
+  margin: 0 0 7px;
+  color: var(--gs-dark);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.direct-payment-information p {
+  margin: 0;
+  color: var(--gs-muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.direct-payment-footer {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 17px;
+  padding-top: 13px;
+  border-top: 1px solid #edf1ee;
+  color: var(--gs-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.direct-payment-footer ion-icon {
+  flex-shrink: 0;
+  color: var(--gs-green);
+  font-size: 15px;
+}
+
 /* PAYMENT PENDING */
 
 .payment-pending-notice {
@@ -2322,6 +2457,10 @@
     grid-template-columns: 1fr;
   }
 
+  .direct-payment-grid {
+    grid-template-columns: 1fr;
+  }
+
   .dashboard-footer {
     flex-direction: column;
     align-items: flex-start;
@@ -2509,6 +2648,19 @@
 
   .payment-pending-notice {
     padding: 15px;
+  }
+
+  .direct-payment-card {
+    padding: 16px;
+  }
+
+  .direct-payment-heading h3 {
+    font-size: 15px;
+  }
+
+  .coming-soon-badge {
+    padding: 6px 8px;
+    font-size: 8px;
   }
 
   .dashboard-footer {
@@ -2751,6 +2903,7 @@
     width: 100%;
   }
 }
+
 /* =========================================
    SUGGESTED SERVICES BY CATEGORY
 ========================================= */
@@ -2953,12 +3106,6 @@
     font-size: 10px;
   }
 }
-
-
-
-
-
-/* ==========================================
 
 /* ==========================================
    SUGGESTED SERVICES - CORRECTED STYLES
@@ -3171,4 +3318,3 @@
     font-size: 11px;
   }
 }
-

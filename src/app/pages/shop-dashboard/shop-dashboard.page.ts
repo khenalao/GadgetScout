@@ -47,7 +47,9 @@ import {
   phonePortraitOutline,
   laptopOutline,
   tabletPortraitOutline,
-  desktopOutline
+  desktopOutline,
+  lockClosedOutline,
+  walletOutline
 } from 'ionicons/icons';
 
 import { Router } from '@angular/router';
@@ -325,7 +327,9 @@ export class ShopDashboardPage implements OnDestroy {
       phonePortraitOutline,
       laptopOutline,
       tabletPortraitOutline,
-      desktopOutline
+      desktopOutline,
+      lockClosedOutline,
+      walletOutline
     });
 
     this.authUnsubscribe = onAuthStateChanged(
